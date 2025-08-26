@@ -2,11 +2,12 @@ package main
 
 import (
 	"PennieAI/models"
+	"log"
+	"os"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"log"
-	"os"
 )
 
 func main() {
