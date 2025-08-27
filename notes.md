@@ -65,7 +65,7 @@ Not Go style
 
 ### Proposed Structure
 
-GearMateGo/                    # Your root directory
+PennieAI/                    # Your root directory
 ├── go.mod                     # Module definition (already created)
 ├── go.sum                     # Dependency checksums (created by go get)
 ├── main.go                    # Application entry point
@@ -76,8 +76,8 @@ GearMateGo/                    # Your root directory
 │   ├── database.go           # Database configuration
 │   └── config.go             # Application configuration
 ├── models/
-│   ├── item.go               # Item model (you have this)
-│   ├── user.go               # User model
+│   ├── unprocessed_document.go           
+│   ├── document.go              
 │   └── database.go           # Database connection/migration helpers
 ├── handlers/
 │   ├── items.go              # Item HTTP handlers
