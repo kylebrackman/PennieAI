@@ -50,6 +50,7 @@ func InitDatabase() {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
+	// TODO: Review connection pools. Who is making these connections? Why would it increase to 100?
 	// Configure connection pool (optional but recommended)
 	DB.SetMaxIdleConns(10)
 	DB.SetMaxOpenConns(100)

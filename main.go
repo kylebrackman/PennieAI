@@ -44,7 +44,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
+	
 	// Start server
 	log.Printf("🐾 PennieAI API starting on port %s...", port)
 	log.Printf("📍 Health check: http://localhost:%s/health", port)
