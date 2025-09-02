@@ -31,11 +31,11 @@ func SetupRoutes(router *gin.Engine) {
 		// Document management routes
 		documents := v1.Group("/documents")
 		{
-			documents.GET("", handlers.GetAllDocuments)       // GET /api/v1/documents
-			documents.GET("/:id", handlers.GetDocumentByID)   // GET /api/v1/documents/:id
-			documents.POST("", handlers.CreateDocument)       // POST /api/v1/documents
-			documents.PUT("/:id", handlers.UpdateDocument)    // PUT /api/v1/documents/:id
-			documents.DELETE("/:id", handlers.DeleteDocument) // DELETE /api/v1/documents/:id
+			documents.GET("", handlers.GetAllDocuments)          // GET /api/v1/documents
+			documents.GET("/:id", handlers.GetDocumentByID)      // GET /api/v1/documents/:id
+			documents.POST("", handlers.CreateDocument)          // POST /api/v1/documents
+			documents.DELETE("/:id", handlers.DeleteDocument)    // DELETE /api/v1/documents/:id
+			documents.POST("/analyze", handlers.AnalyzeDocument) // POST /api/v1/documents
 		}
 
 		// Unprocessed document routes
