@@ -2,8 +2,7 @@ package handlers
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -28,10 +27,18 @@ func TestAiService(c *gin.Context) {
 	})
 
 	if err != nil {
-		log.Fatal("Error:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Failed to connect to OpenAI",
+			"message": err.Error(),
+		})
+		return
 	}
 
-	fmt.Println("✅ OpenAI connected successfully!")
-	fmt.Println("Response:", resp.Choices[0].Message.Content)
+	// Return success response
+	c.JSON(http.StatusOK, gin.H{
+		"success":     true,
+		"message":     "OpenAI connected successfully! 🎉",
+		"ai_response": resp.Choices[0].Message.Content,
+	})
 
 }
