@@ -38,6 +38,11 @@ func SetupRoutes(router *gin.Engine) {
 			documents.POST("/analyze", handlers.AnalyzeDocument) // POST /api/v1/documents
 		}
 
+		aiTool := v1.Group("/ai_tool")
+		{
+			aiTool.GET("/test", handlers.TestAiService)
+		}
+
 		// Unprocessed document routes
 		//unprocessedDocuments := v1.Group("/unprocessed")
 		//{
