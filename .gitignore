@@ -1,2 +1,5 @@
 .env*
 Q&A
+
+tmp/build-errors.log
+tmp/main

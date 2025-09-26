@@ -12,6 +12,8 @@ import (
 )
 
 func TestAiService(c *gin.Context) {
+	// TODO: Review why not sending err back to client, as per all go methods
+	// What is 'c' referring to above?
 	godotenv.Load()
 
 	// Create client
