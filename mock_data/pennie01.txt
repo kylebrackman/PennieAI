@@ -1,0 +1,29 @@
+New Patient Registration & Owner Information Form
+Patient Information:
+
+Name: Pennie
+Species: Canine (Dog)
+Breed: Labrador Retriever (Mixed)
+Date of Birth: June 15, 2009
+Sex: Female, Spayed
+Color/Markings: Golden coat with slight white patch on chest
+Owner Information:
+
+Owner Name: Jennifer Thompson
+Address: 123 Maple Street, Brookside, State
+Contact Number: (555) 123-4567
+Email: jennifer.thompson@example.com
+Emergency Contact:
+
+Name: Mark Thompson
+Relationship: Husband/Alternate Contact
+Contact Number: (555) 987-6543
+Initial Registration Details:
+
+Date of Registration: March 5, 2011
+Primary Veterinarian: Dr. Susan Ramirez, DVM
+Clinic: Brookside Veterinary Clinic
+Reason for Visit: New patient registration; routine wellness evaluation scheduled.
+Notes:
+Pennie appears healthy during registration. Owner noted occasional mild lethargy but no acute issues. A full physical exam and baseline blood work have been scheduled.
+

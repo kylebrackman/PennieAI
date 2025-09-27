@@ -41,6 +41,7 @@ func SetupRoutes(router *gin.Engine) {
 		aiTool := v1.Group("/ai_tool")
 		{
 			aiTool.GET("/test", handlers.TestAiService)
+			aiTool.GET("/model_version", handlers.GetAiModelVersion)
 		}
 
 		// Unprocessed document routes

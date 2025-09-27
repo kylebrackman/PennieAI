@@ -1,0 +1,25 @@
+EEG and CSF Analysis Report
+Examination Date: July 22, 2013
+Patient Name: Pennie
+Owner: Jennifer Thompson
+Attending Veterinarian: Dr. Susan Ramirez, DVM – Neurology Unit
+Clinic: Brookside Veterinary Clinic – Diagnostic Imaging & Laboratory
+
+Indications:
+Following the neurological exam, Pennie underwent an electroencephalogram (EEG) and cerebrospinal fluid (CSF) analysis to investigate the reported intermittent neurological signs.
+
+Diagnostic Testing:
+
+EEG Findings:
+Recorded baseline brain activity is mostly within normal limits; however, intermittent, subtle spike-wave discharges were noted during periods of drowsiness.
+No sustained seizure activity was captured during the study.
+CSF Analysis:
+Slightly elevated protein levels noted.
+Mild pleocytosis (increased cell count) observed, suggesting a low-grade inflammatory process.
+No infectious agents identified on preliminary screening.
+Interpretation & Recommendations:
+
+The combined findings of subtle EEG abnormalities and mild inflammatory changes in the CSF are nonspecific but raise concern for an emerging neurological condition with an inflammatory component.
+These results will be correlated with ongoing clinical signs and further diagnostic imaging.
+Recommend a follow-up neurological evaluation and repeat CSF analysis in 6–8 weeks to monitor progression.
+Continue supportive care and advise owner to report any further episodes of disorientation or seizure-like activity.

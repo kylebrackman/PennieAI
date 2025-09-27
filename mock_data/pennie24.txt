@@ -1,0 +1,20 @@
+Cardiology Follow-Up Email
+Email Date: June 10, 2013
+From: Dr. Robert Chen, DVM (robert.chen@brooksidevet.com)
+To: Jennifer Thompson (jennifer.thompson@example.com)
+Subject: Follow-Up on Cardiology Consultation for Pennie
+
+Email Content:
+
+Dear Jennifer,
+
+Following our cardiology consultation on June 8th, I wanted to provide you with a brief summary of the findings regarding Pennie’s heart evaluation.
+
+The examination, including ECG and echocardiography, indicates that the systolic murmur is likely incidental and does not currently signify a major health concern. I recommend that we continue to monitor her heart with annual evaluations. In the meantime, please maintain her current moderate exercise routine and keep a close watch for any signs of difficulty during activity, such as excessive fatigue or labored breathing.
+
+Should you notice any changes or have further questions, feel free to contact me or our clinic.
+
+Thank you for your continued commitment to Pennie’s health.
+
+Best regards, Dr. Robert Chen, DVM
+Brookside Veterinary Clinic

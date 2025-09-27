@@ -1,0 +1,32 @@
+Laboratory Test Results Report
+Report Date: March 12, 2011
+Patient Name: Pennie
+Owner: Jennifer Thompson
+Referring Veterinarian: Dr. Susan Ramirez, DVM
+Laboratory: Brookside Veterinary Diagnostic Lab
+
+Tests Conducted:
+
+Complete Blood Count (CBC):
+
+White Blood Cells: 12.1 x10³/µL (Slightly elevated; may be stress-related)
+Red Blood Cells: 6.8 x10⁶/µL (Normal)
+Hemoglobin: 14.0 g/dL (Normal)
+Platelets: 230 x10³/µL (Normal)
+Serum Chemistry Panel:
+
+Glucose: 90 mg/dL (Normal)
+Liver Enzymes (ALT, AST): Within normal range
+Kidney Markers (BUN, Creatinine): Normal
+Electrolytes: Balanced
+Thyroid Function Test:
+
+T4: Within expected range for breed and age
+Interpretation:
+Pennie’s lab results are mostly within normal limits. The slight elevation in white blood cells is not considered clinically significant at this time. No urgent follow-up required.
+
+Plan:
+
+Routine recheck in one year unless symptoms develop
+Maintain current diet and activity levels
+Consider retesting if any clinical changes arise

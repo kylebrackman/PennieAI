@@ -1,0 +1,27 @@
+Vaccination Administration Record
+Visit Date: April 15, 2011
+Patient Name: Pennie
+Owner: Jennifer Thompson
+Attending Veterinarian: Dr. Susan Ramirez, DVM
+Clinic: Brookside Veterinary Clinic
+
+Vaccines Administered:
+
+Rabies Vaccine: Single-dose injection administered in the right hind leg.
+DA2PP (Distemper, Adenovirus, Parainfluenza, Parvovirus): Booster shot given in the left front leg.
+Leptospirosis: Administered concurrently; injection given in the right front leg.
+Administration Details:
+
+Injection Sites:
+Rabies: Right hind limb
+DA2PP: Left front limb
+Leptospirosis: Right front limb
+Observation Period: Pennie was observed for 30 minutes post-injection with no adverse reactions noted.
+Additional Notes:
+Pennie tolerated all injections well.
+Minor swelling (<1 cm) noted at the injection site on the left front leg; advised to monitor for changes.
+Follow-Up Instructions:
+
+Monitor injection sites for signs of inflammation or allergic reaction.
+Resume normal activity after a brief rest period.
+Return for a recheck if any unusual symptoms occur within 48 hours.
