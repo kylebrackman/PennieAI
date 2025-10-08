@@ -39,6 +39,7 @@ func NewAIService() *AIService {
 	}
 }
 
+// Context below is part of Go's standard library for request-scoped values
 func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions) (map[string]interface{}, error) {
 	if opts == nil {
 		opts = &QueryOptions{}
@@ -92,6 +93,7 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 	}
 
 	// Convert response to JSON string (to match Ruby storage format)
+	// Todo: left off here
 	responseJSON, _ := json.Marshal(map[string]interface{}{
 		"choices": []map[string]interface{}{
 			{
@@ -132,6 +134,7 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 }
 
 // saveInference saves inference to database
+// Todo: review error handling below
 func (s *AIService) saveInference(inference *models.Inference) error {
 	db := config.GetDB()
 
@@ -142,6 +145,12 @@ func (s *AIService) saveInference(inference *models.Inference) error {
 		VALUES ($1, $2, $3, $4, $5, $6, $7) 
 		RETURNING id`
 
+	/**
+	The below db.Get populates inference.ID with the returned id
+	db.Get is like db.QueryRow but it scans the result into the provided destination
+	We pass the address of inference.ID so it gets populated
+	The rest are the parameters for the SQL query
+	*/
 	return db.Get(&inference.ID, query,
 		inference.Request,
 		inference.Response,
