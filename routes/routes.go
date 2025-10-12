@@ -28,6 +28,8 @@ func SetupRoutes(router *gin.Engine) {
 	// API versioning
 	v1 := router.Group("/api/v1")
 	{
+		v1.POST("/analyze", handlers.AnalyzeUnprocessedDocument)
+
 		// Document management routes
 		documents := v1.Group("/documents")
 		{

@@ -1,31 +1,18 @@
 package services
 
 import (
-	"io"
+	"PennieAI/utils"
 	"mime/multipart"
-	"strings"
 )
 
-func AnalyzeDocument(file *multipart.FileHeader) error {
-	// Open the file
-	openedFile, err := file.Open() // This returns an io.ReadCloser, which is a reader interface
-	// See Q&A 2025-10-11 for more info
+func AnalyzeDocument(file *multipart.FileHeader) ([]string, error) {
+	// Get file lines
+	fileLines, err := utils.GetFileLines(file)
 	if err != nil {
-		return err
-	}
-	defer openedFile.Close()
-
-	// Read the content into bytes
-	fileBytes, err := io.ReadAll(openedFile)
-	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Convert bytes to string
-	fileContent := string(fileBytes)
-
-	// Now you can split it
-	return strings.Split(fileContent, "\n")
+	return fileLines, nil
 
 	// ... continue processing
 }

@@ -20,6 +20,19 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 		return
 	}
 
-	services.AnalyzeDocument(file)
+	fileLines, err := services.AnalyzeDocument(file)
 
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Failed to analyze document",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":    fileLines,
+		"count":   len(fileLines),
+		"message": "Document analyzed successfully",
+	})
 }
