@@ -176,13 +176,6 @@ func DeleteDocument(c *gin.Context) {
 	})
 }
 
-func AnalyzeDocument(c *gin.Context) {
-	// Placeholder for future AI analysis implementation
-	c.JSON(http.StatusNotImplemented, gin.H{
-		"message": "Document analysis feature is not yet implemented",
-	})
-}
-
 // Request structs for JSON binding
 type CreateDocumentRequest struct {
 	Title          string `json:"title" binding:"required"`
