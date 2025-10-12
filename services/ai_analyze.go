@@ -14,5 +14,12 @@ func AnalyzeDocument(file *multipart.FileHeader) ([]string, error) {
 
 	return fileLines, nil
 
+	// Now segment the document into windows
+
+	windows, err := utils.WindowBuilder(fileLines, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	// ... continue processing
 }

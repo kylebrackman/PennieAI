@@ -7,7 +7,9 @@ import (
 )
 
 func GetFileLines(file *multipart.FileHeader) ([]string, error) {
-	openedFile, err := file.Open() // This returns an io.ReadCloser, which is a reader interface
+
+	// This returns an io.ReadCloser, which is a reader interface
+	openedFile, err := file.Open()
 	// See Q&A 2025-10-11 for more info
 	if err != nil {
 		return nil, err
@@ -28,6 +30,6 @@ func GetFileLines(file *multipart.FileHeader) ([]string, error) {
 	// Convert bytes to string
 	fileContent := string(fileBytes)
 
-	// Now you can split it
+	// Now split it
 	return strings.Split(fileContent, "\n"), nil
 }
