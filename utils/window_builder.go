@@ -11,7 +11,7 @@ type WindowOptions struct {
 	OverlapSize int
 }
 
-func WindowBuilder(lines []string, opts *WindowOptions) ([]Window, err) {
+func WindowBuilder(lines []string, opts *WindowOptions) []Window {
 	if opts == nil {
 		opts = &WindowOptions{
 			WindowSize:  300,
@@ -40,6 +40,6 @@ func WindowBuilder(lines []string, opts *WindowOptions) ([]Window, err) {
 
 	}
 
-	return windows, nil
+	return windows
 
 }
