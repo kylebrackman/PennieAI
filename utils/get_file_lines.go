@@ -12,7 +12,12 @@ func GetFileLines(file *multipart.FileHeader) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer openedFile.Close()
+	defer func() {
+		if closeErr := openedFile.Close(); closeErr != nil {
+			// Todo: handle the error if needed
+			// Log it or handle it somehow
+		}
+	}()
 
 	// Read the content into bytes
 	fileBytes, err := io.ReadAll(openedFile)
