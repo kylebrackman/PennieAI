@@ -20,7 +20,8 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 		return
 	}
 
-	fileLines, err := services.AnalyzeDocument(file)
+	aiService := services.NewAIService()
+	patient, analyzedDocuments, err := services.AnalyzeDocument(file, aiService) // ← Fixed
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -31,8 +32,9 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data":    fileLines,
-		"count":   len(fileLines),
-		"message": "Document analyzed successfully",
+		"patient":   patient,
+		"documents": analyzedDocuments,
+		"count":     len(analyzedDocuments),
+		"message":   "Document analyzed successfully",
 	})
 }

@@ -71,19 +71,19 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 	}
 
 	// Handle linking to inferable object (polymorphic association)
-	if opts.Inferable != nil {
-		// You'd implement polymorphic logic here based on type
-		// For now, simplified:
-		switch v := opts.Inferable.(type) {
-		case *models.Document:
-			inference.InferableType = stringPtr("Document")
-			inference.InferableID = &v.ID
-		case *models.Patient:
-			inference.InferableType = stringPtr("Patient")
-			id := int64(v.ID)
-			inference.InferableID = &id
-		}
-	}
+	//if opts.Inferable != nil {
+	//	// You'd implement polymorphic logic here based on type
+	//	// For now, simplified:
+	//	switch v := opts.Inferable.(type) {
+	//	case *models.UnprocessedDocument:
+	//		inference.InferableType = stringPtr("Document")
+	//		inference.InferableID = &v.ID
+	//	case *models.Patient:
+	//		inference.InferableType = stringPtr("Patient")
+	//		id := int64(v.ID)
+	//		inference.InferableID = &id
+	//	}
+	//}
 
 	if err != nil {
 		// Log failed inference

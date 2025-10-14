@@ -4,6 +4,7 @@ import (
 	"PennieAI/models"
 	"PennieAI/prompts"
 	"PennieAI/utils"
+	"context"
 	"encoding/json"
 	"fmt"
 	"mime/multipart"
@@ -11,7 +12,7 @@ import (
 	"strings"
 )
 
-func AnalyzeDocument(file *multipart.FileHeader) ([]utils.Window, error) {
+func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.Patient, []models.AnalyzedDocument, error) {
 
 	var patient models.Patient
 	var analyzedDocuments []models.AnalyzedDocument
@@ -19,7 +20,7 @@ func AnalyzeDocument(file *multipart.FileHeader) ([]utils.Window, error) {
 	// Get file lines
 	fileLines, err := utils.GetFileLines(file)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	windows := utils.WindowBuilder(fileLines, nil)
@@ -69,9 +70,16 @@ func AnalyzeDocument(file *multipart.FileHeader) ([]utils.Window, error) {
 			finalPrompt = incrementalNotice + "\n\n" + finalPrompt
 		}
 
+		response, err := aiService.Query(context.Background(), finalPrompt, nil)
+
+		if err != nil {
+			return nil, nil, fmt.Errorf("AI query failed: %w", err)
+		}
+
+		fmt.Printf("OpenAI Response: %+v\n", response)
 		// TODO: Send finalPrompt to OpenAI
 		// TODO: Process response and append to analyzedDocuments
 	}
 
-	return windows, nil
+	return &patient, analyzedDocuments, nil
 }
