@@ -11,10 +11,10 @@ import (
 )
 
 // GetAllDocuments retrieves all documents from the database
-func GetAllDocuments(c *gin.Context) {
+func GetAllAnalyzedDocuments(c *gin.Context) {
 	db := config.GetDB()
 
-	var documents []models.Document
+	var documents []models.AnalyzedDocument
 	err := db.Select(&documents, "SELECT * FROM documents ORDER BY created_at DESC")
 
 	if err != nil {
@@ -46,7 +46,7 @@ func GetDocumentByID(c *gin.Context) {
 		return
 	}
 
-	var document models.Document
+	var document models.AnalyzedDocument
 	err = db.Get(&document, "SELECT * FROM documents WHERE id = $1", id)
 
 	if err != nil {
@@ -74,7 +74,7 @@ func CreateDocument(c *gin.Context) {
 		return
 	}
 
-	var document models.Document
+	var document models.AnalyzedDocument
 	query := `
 		INSERT INTO documents (title, content, document_type, veterinarian_id, created_at, updated_at) 
 		VALUES ($1, $2, $3, $4, NOW(), NOW())
@@ -119,7 +119,7 @@ func UpdateDocument(c *gin.Context) {
 		return
 	}
 
-	var document models.Document
+	var document models.AnalyzedDocument
 	query := `
 		UPDATE documents 
 		SET title = $2, content = $3, document_type = $4, updated_at = NOW()

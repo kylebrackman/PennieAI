@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Document struct {
+type AnalyzedDocument struct {
 	ID                    int64     `json:"id" db:"id"`
 	Title                 string    `json:"title" db:"title"`
 	Content               string    `json:"content" db:"content"`

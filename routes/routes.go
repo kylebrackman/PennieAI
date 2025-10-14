@@ -33,10 +33,10 @@ func SetupRoutes(router *gin.Engine) {
 		// Document management routes
 		documents := v1.Group("/documents")
 		{
-			documents.GET("", handlers.GetAllDocuments)       // GET /api/v1/documents
-			documents.GET("/:id", handlers.GetDocumentByID)   // GET /api/v1/documents/:id
-			documents.POST("", handlers.CreateDocument)       // POST /api/v1/documents
-			documents.DELETE("/:id", handlers.DeleteDocument) // DELETE /api/v1/documents/:id
+			documents.GET("", handlers.GetAllAnalyzedDocuments) // GET /api/v1/documents
+			documents.GET("/:id", handlers.GetDocumentByID)     // GET /api/v1/documents/:id
+			documents.POST("", handlers.CreateDocument)         // POST /api/v1/documents
+			documents.DELETE("/:id", handlers.DeleteDocument)   // DELETE /api/v1/documents/:id
 		}
 
 		aiTool := v1.Group("/ai_tool")

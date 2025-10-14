@@ -1,12 +1,21 @@
 package services
 
 import (
+	"PennieAI/models"
+	"PennieAI/prompts"
 	"PennieAI/utils"
+	"encoding/json"
+	"fmt"
 	"mime/multipart"
 	"strconv"
+	"strings"
 )
 
 func AnalyzeDocument(file *multipart.FileHeader) ([]utils.Window, error) {
+
+	var patient models.Patient
+	var analyzedDocuments []models.AnalyzedDocument
+
 	// Get file lines
 	fileLines, err := utils.GetFileLines(file)
 	if err != nil {
@@ -15,12 +24,54 @@ func AnalyzeDocument(file *multipart.FileHeader) ([]utils.Window, error) {
 
 	windows := utils.WindowBuilder(fileLines, nil)
 
+	// Process each window
 	for _, window := range windows {
+		// Number the lines for this window
 		for lineIndex, line := range window.WindowLines {
-			lineNumber := window.StartIndex + lineIndex + 1 // +1 for 1-based line numbers
+			lineNumber := window.StartIndex + lineIndex + 1
 			window.WindowLines[lineIndex] = strconv.Itoa(lineNumber) + ": " + line
 		}
-	}
-	return windows, nil
 
+		// Create numbered text for THIS window
+		numberedText := strings.Join(window.WindowLines, "\n")
+
+		// Build incremental notice if we have previous documents
+		// Build incremental notice if we have previous documents
+		// This tells OpenAI what we've already found in earlier windows to avoid duplicates
+		var incrementalNotice string
+		if len(analyzedDocuments) > 0 {
+			// Convert patient struct to pretty JSON string
+			// Example: {"name": "Bella", "species": "Dog", "breed": "Golden Retriever"}
+			patientJSON, _ := json.MarshalIndent(patient, "  ", "  ")
+
+			// Convert documents slice to pretty JSON array string
+			// Example: [{"title": "Lab Report", "start_line": 1, "end_line": 45}, ...]
+			docsJSON, _ := json.MarshalIndent(analyzedDocuments, "  ", "  ")
+
+			// Insert the JSON strings into the template
+			// The template has two %s placeholders - one for patient, one for documents
+			// This creates a message like:
+			// "Here's the current patient: {patient JSON}
+			//  Here's what you already found: [documents JSON]"
+			incrementalNotice = fmt.Sprintf(prompts.IncrementalNoticeTemplate, patientJSON, docsJSON)
+		}
+
+		// Example of what incrementalNotice might contain after this:
+		// "Since you are being provided a sliding window...
+		//  Here's the current patient information:
+		//    {"name": "Bella", "species": "Dog"}
+		//  Here's documents already identified:
+		//    [{"title": "Lab Report", "start_line": 1, "end_line": 45}]"
+
+		// Build the final prompt for THIS window
+		finalPrompt := fmt.Sprintf(prompts.BasePrompt, numberedText)
+		if incrementalNotice != "" {
+			finalPrompt = incrementalNotice + "\n\n" + finalPrompt
+		}
+
+		// TODO: Send finalPrompt to OpenAI
+		// TODO: Process response and append to analyzedDocuments
+	}
+
+	return windows, nil
 }
