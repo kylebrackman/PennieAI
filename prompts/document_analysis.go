@@ -31,7 +31,7 @@ Return a structured JSON object with the documents and patient in this shape:
 }
 
 Here is the text chunk:
-%s`
+`
 
 const IncrementalNoticeTemplate = `Since you are being provided a sliding window, data from previous runs will be made 
 available in order for you to more accurately and completely extract all relevant 

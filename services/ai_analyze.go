@@ -79,6 +79,51 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		fmt.Printf("OpenAI Response: %+v\n", response)
 		// TODO: Send finalPrompt to OpenAI
 		// TODO: Process response and append to analyzedDocuments
+
+		fmt.Printf("OpenAI Response: %+v\n", response)
+
+		// Extract and merge patient data from response
+		// See Q&A 2025-10-14 for more info on this syntax
+		if patientData, ok := response["patient"].(map[string]interface{}); ok {
+			// Merge patient fields (prefer non-empty values)
+			if name, ok := patientData["name"].(string); ok && name != "" {
+				patient.Name = name
+			}
+			if species, ok := patientData["species"].(string); ok && species != "" {
+				speciesPtr := species
+				patient.Species = &speciesPtr
+			}
+			// ... continue for other fields
+		}
+
+		// Extract documents from response
+		if docs, ok := response["documents"].([]interface{}); ok {
+			for _, doc := range docs {
+				if docMap, ok := doc.(map[string]interface{}); ok {
+					// Check if this document already exists (deduplicate by start_line)
+					startLine := int64(docMap["start_line"].(float64))
+
+					// Check for duplicates
+					isDuplicate := false
+					for _, existingDoc := range analyzedDocuments {
+						if existingDoc.StartLine == startLine {
+							isDuplicate = true
+							break
+						}
+					}
+
+					if !isDuplicate {
+						// Create new AnalyzedDocument and append
+						analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
+							Title:     docMap["title"].(string),
+							StartLine: startLine,
+							EndLine:   int64(docMap["end_line"].(float64)),
+							// ... other fields
+						})
+					}
+				}
+			}
+		}
 	}
 
 	return &patient, analyzedDocuments, nil
