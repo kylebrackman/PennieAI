@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"mime/multipart"
-	"strconv"
 	"strings"
 )
 
@@ -28,23 +27,28 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 	// Process each window
 	for _, window := range windows {
 		// Number the lines for this window
-		for lineIndex, line := range window.WindowLines {
-			lineNumber := window.StartIndex + lineIndex + 1
-			window.WindowLines[lineIndex] = strconv.Itoa(lineNumber) + ": " + line
-		}
+		//for lineIndex, line := range window.WindowLines {
+		//	lineNumber := window.StartIndex + lineIndex + 1
+		//	window.WindowLines[lineIndex] = strconv.Itoa(lineNumber) + ": " + line
+		//}
 
 		// Create numbered text for THIS window
-		numberedText := strings.Join(window.WindowLines, "\n")
+		//numberedText := strings.Join(window.WindowLines, "\n")
 
 		// Build incremental notice if we have previous documents
 		// Build incremental notice if we have previous documents
 		// This tells OpenAI what we've already found in earlier windows to avoid duplicates
 		var incrementalNotice string
+
+		var promptBuilder strings.Builder
+
 		if len(analyzedDocuments) > 0 {
+
 			// Convert patient struct to pretty JSON string
 			// Example: {"name": "Bella", "species": "Dog", "breed": "Golden Retriever"}
 			patientJSON, _ := json.MarshalIndent(patient, "  ", "  ")
 
+			promptBuilder.WriteString("\n")
 			// Convert documents slice to pretty JSON array string
 			// Example: [{"title": "Lab Report", "start_line": 1, "end_line": 45}, ...]
 			docsJSON, _ := json.MarshalIndent(analyzedDocuments, "  ", "  ")
@@ -55,22 +59,20 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 			// "Here's the current patient: {patient JSON}
 			//  Here's what you already found: [documents JSON]"
 			incrementalNotice = fmt.Sprintf(prompts.IncrementalNoticeTemplate, patientJSON, docsJSON)
+			promptBuilder.WriteString(incrementalNotice)
+			promptBuilder.WriteString("\n")
 		}
 
-		// Example of what incrementalNotice might contain after this:
-		// "Since you are being provided a sliding window...
-		//  Here's the current patient information:
-		//    {"name": "Bella", "species": "Dog"}
-		//  Here's documents already identified:
-		//    [{"title": "Lab Report", "start_line": 1, "end_line": 45}]"
-
-		// Build the final prompt for THIS window
-		finalPrompt := fmt.Sprintf(prompts.BasePrompt, numberedText)
-		if incrementalNotice != "" {
-			finalPrompt = incrementalNotice + "\n\n" + finalPrompt
+		promptBuilder.WriteString(prompts.BasePrompt)
+		for lineIndex, line := range window.WindowLines {
+			lineNumber := window.StartIndex + lineIndex + 1
+			// "#{lineNumber}: #{line}\n"
+			promptBuilder.WriteString(fmt.Sprintf("%d: %s\n", lineNumber, line))
 		}
+		fmt.Println(promptBuilder.String())
 
-		response, err := aiService.Query(context.Background(), finalPrompt, nil)
+		//return nil, nil, nil // TODO: Remove this line after testing
+		response, err := aiService.Query(context.Background(), promptBuilder.String(), nil)
 
 		if err != nil {
 			return nil, nil, fmt.Errorf("AI query failed: %w", err)

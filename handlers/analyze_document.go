@@ -21,7 +21,7 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 	}
 
 	aiService := services.NewAIService()
-	patient, analyzedDocuments, err := services.AnalyzeDocument(file, aiService) // ← Fixed
+	patient, analyzedDocuments, err := services.AnalyzeDocument(file, aiService)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

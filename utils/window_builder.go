@@ -30,14 +30,7 @@ func WindowBuilder(lines []string, opts *WindowOptions) []Window {
 			endIndex = len(lines)
 		}
 
-		// Create a copy of the slice to avoid referencing the original slice
-		// which may lead to unexpected behavior if the original slice changes
-		// after the window is created.
-		windowLines := make([]string, endIndex-startIndex)
-
-		// Copy the relevant lines into the new slice
-		// The copy() function fills the first slice (destination) with values from the second slice (source).
-		copy(windowLines, lines[startIndex:endIndex])
+		windowLines := lines[startIndex:endIndex]
 
 		window := Window{
 			StartIndex:  startIndex,
