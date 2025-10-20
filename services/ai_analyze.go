@@ -26,15 +26,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 
 	// Process each window
 	for _, window := range windows {
-		// Number the lines for this window
-		//for lineIndex, line := range window.WindowLines {
-		//	lineNumber := window.StartIndex + lineIndex + 1
-		//	window.WindowLines[lineIndex] = strconv.Itoa(lineNumber) + ": " + line
-		//}
-
-		// Create numbered text for THIS window
-		//numberedText := strings.Join(window.WindowLines, "\n")
-
 		// Build incremental notice if we have previous documents
 		// Build incremental notice if we have previous documents
 		// This tells OpenAI what we've already found in earlier windows to avoid duplicates
