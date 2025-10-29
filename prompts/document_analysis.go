@@ -29,8 +29,6 @@ Return a structured JSON object with the documents and patient in this shape:
     end_line: number;   // end of document
   }[];
 }
-
-Here is the text chunk:
 `
 
 const IncrementalNoticeTemplate = `Since you are being provided a sliding window, data from previous runs will be made 

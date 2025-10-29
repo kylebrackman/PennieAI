@@ -32,37 +32,45 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		var incrementalNotice string
 
 		var promptBuilder strings.Builder
+		promptBuilder.WriteString(prompts.BasePrompt)
 
 		if len(analyzedDocuments) > 0 {
 
 			// Convert patient struct to pretty JSON string
 			// Example: {"name": "Bella", "species": "Dog", "breed": "Golden Retriever"}
 			patientJSON, _ := json.MarshalIndent(patient, "  ", "  ")
-
-			promptBuilder.WriteString("\n")
 			// Convert documents slice to pretty JSON array string
 			// Example: [{"title": "Lab Report", "start_line": 1, "end_line": 45}, ...]
 			docsJSON, _ := json.MarshalIndent(analyzedDocuments, "  ", "  ")
+			incrementalNotice = fmt.Sprintf(prompts.IncrementalNoticeTemplate, patientJSON, docsJSON)
+
+			promptBuilder.WriteString("\n")
+
+			promptBuilder.WriteString(incrementalNotice)
 
 			// Insert the JSON strings into the template
 			// The template has two %s placeholders - one for patient, one for documents
 			// This creates a message like:
 			// "Here's the current patient: {patient JSON}
 			//  Here's what you already found: [documents JSON]"
-			incrementalNotice = fmt.Sprintf(prompts.IncrementalNoticeTemplate, patientJSON, docsJSON)
-			promptBuilder.WriteString(incrementalNotice)
 			promptBuilder.WriteString("\n")
 		}
+		promptBuilder.WriteString("Here is the text chunk:\n")
 
-		promptBuilder.WriteString(prompts.BasePrompt)
 		for lineIndex, line := range window.WindowLines {
 			lineNumber := window.StartIndex + lineIndex + 1
 			// "#{lineNumber}: #{line}\n"
 			promptBuilder.WriteString(fmt.Sprintf("%d: %s\n", lineNumber, line))
 		}
+
+		analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
+			Title: fmt.Sprintf("test_%d", window.StartIndex),
+			// Just for testing purposes
+			StartLine: 0,
+			EndLine:   1,
+		})
 		fmt.Println(promptBuilder.String())
 
-		//return nil, nil, nil // TODO: Remove this line after testing
 		response, err := aiService.Query(context.Background(), promptBuilder.String(), nil)
 
 		if err != nil {
