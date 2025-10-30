@@ -78,10 +78,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		}
 
 		fmt.Printf("OpenAI Response: %+v\n", response)
-		// TODO: Send finalPrompt to OpenAI
-		// TODO: Process response and append to analyzedDocuments
-
-		fmt.Printf("OpenAI Response: %+v\n", response)
 
 		// Extract and merge patient data from response
 		// See Q&A 2025-10-14 for more info on this syntax
@@ -94,11 +90,14 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				speciesPtr := species
 				patient.Species = &speciesPtr
 			}
-			// ... continue for other fields
+			if breed, ok := patientData["breed"].(string); ok && breed != "" {
+				breedPtr := breed
+				patient.Breed = &breedPtr
+			}
 		}
 
 		// Extract documents from response
-		if docs, ok := response["documents"].([]interface{}); ok {
+		if docs, ok := response["documents"].(map[models.AnalyzedDocument]); ok {
 			for _, doc := range docs {
 				if docMap, ok := doc.(map[string]interface{}); ok {
 					// Check if this document already exists (deduplicate by start_line)
