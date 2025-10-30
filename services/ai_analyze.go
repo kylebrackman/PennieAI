@@ -87,8 +87,7 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				patient.Name = name
 			}
 			if species, ok := patientData["species"].(string); ok && species != "" {
-				speciesPtr := species
-				patient.Species = &speciesPtr
+				patient.PossibleSpecies = append(patient.PossibleSpecies, species)
 			}
 			if breed, ok := patientData["breed"].(string); ok && breed != "" {
 				breedPtr := breed
@@ -97,7 +96,7 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		}
 
 		// Extract documents from response
-		if docs, ok := response["documents"].(map[models.AnalyzedDocument]); ok {
+		if docs, ok := response["documents"].([]interface{}); ok {
 			for _, doc := range docs {
 				if docMap, ok := doc.(map[string]interface{}); ok {
 					// Check if this document already exists (deduplicate by start_line)
