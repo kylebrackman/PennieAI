@@ -98,9 +98,9 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		// Extract documents from response
 		if docs, ok := response["documents"].([]interface{}); ok {
 			for _, doc := range docs {
-				if docMap, ok := doc.(map[string]interface{}); ok {
+				if docDetails, ok := doc.(map[string]interface{}); ok {
 					// Check if this document already exists (deduplicate by start_line)
-					startLine := int64(docMap["start_line"].(float64))
+					startLine := int64(docDetails["start_line"].(float64))
 
 					// Check for duplicates
 					isDuplicate := false
@@ -114,9 +114,9 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 					if !isDuplicate {
 						// Create new AnalyzedDocument and append
 						analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
-							Title:     docMap["title"].(string),
+							Title:     docDetails["title"].(string),
 							StartLine: startLine,
-							EndLine:   int64(docMap["end_line"].(float64)),
+							EndLine:   int64(docDetails["end_line"].(float64)),
 							// ... other fields
 						})
 					}
