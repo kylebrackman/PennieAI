@@ -39,6 +39,7 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 			// Convert patient struct to pretty JSON string
 			// Example: {"name": "Bella", "species": "Dog", "breed": "Golden Retriever"}
 			patientJSON, _ := json.MarshalIndent(patient, "  ", "  ")
+
 			// Convert documents slice to pretty JSON array string
 			// Example: [{"title": "Lab Report", "start_line": 1, "end_line": 45}, ...]
 			docsJSON, _ := json.MarshalIndent(analyzedDocuments, "  ", "  ")
@@ -87,11 +88,19 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				patient.Name = name
 			}
 			if species, ok := patientData["species"].(string); ok && species != "" {
-				patient.PossibleSpecies = append(patient.PossibleSpecies, species)
+				// First, check if the pointer is nil
+				if patient.PossibleSpecies == nil {
+					// If it's nil, initialize it with a pointer to an empty slice
+					patient.PossibleSpecies = &[]string{}
+				}
+				// Now dereference the pointer and append to the slice
+				*patient.PossibleSpecies = append(*patient.PossibleSpecies, species)
 			}
 			if breed, ok := patientData["breed"].(string); ok && breed != "" {
-				breedPtr := breed
-				patient.Breed = &breedPtr
+				if patient.PossibleBreed == nil {
+					patient.PossibleBreed = &[]string{}
+				}
+				*patient.PossibleBreed = append(*patient.PossibleBreed, breed)
 			}
 		}
 
