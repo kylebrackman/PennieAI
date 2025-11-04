@@ -102,6 +102,9 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				}
 				*patient.PossibleBreed = append(*patient.PossibleBreed, breed)
 			}
+			if sex, ok := patientData["sex"].(string); ok && sex != "" {
+				patient.Sex = &sex
+			}
 		}
 
 		// Extract documents from response
@@ -110,6 +113,9 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				if docDetails, ok := doc.(map[string]interface{}); ok {
 					// Check if this document already exists (deduplicate by start_line)
 					startLine := int64(docDetails["start_line"].(float64))
+					title := docDetails["title"].(string)
+					endLine := int64(docDetails["end_line"].(float64))
+					numberOfLines := endLine - startLine
 
 					// Check for duplicates
 					isDuplicate := false
@@ -123,10 +129,10 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 					if !isDuplicate {
 						// Create new AnalyzedDocument and append
 						analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
-							Title:     docDetails["title"].(string),
-							StartLine: startLine,
-							EndLine:   int64(docDetails["end_line"].(float64)),
-							// ... other fields
+							Title:         title,
+							StartLine:     startLine,
+							EndLine:       endLine,
+							NumberOfLines: numberOfLines,
 						})
 					}
 				}
