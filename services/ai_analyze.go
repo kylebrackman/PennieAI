@@ -107,7 +107,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 			}
 		}
 
-		// Extract documents from response
 		if docs, ok := response["documents"].([]interface{}); ok {
 			for _, doc := range docs {
 				if docDetails, ok := doc.(map[string]interface{}); ok {
@@ -117,7 +116,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 					endLine := int64(docDetails["end_line"].(float64))
 					numberOfLines := endLine - startLine
 
-					// Check for duplicates
 					isDuplicate := false
 					for _, existingDoc := range analyzedDocuments {
 						if existingDoc.StartLine == startLine {
@@ -127,7 +125,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 					}
 
 					if !isDuplicate {
-						// Create new AnalyzedDocument and append
 						analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
 							Title:         title,
 							StartLine:     startLine,
