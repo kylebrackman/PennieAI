@@ -100,7 +100,18 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 				if patient.PossibleBreed == nil {
 					patient.PossibleBreed = &[]string{}
 				}
-				*patient.PossibleBreed = append(*patient.PossibleBreed, breed)
+
+				newPossibleBreed := true
+
+				for _, possibleBreed := range *patient.PossibleBreed {
+					if possibleBreed == breed {
+						newPossibleBreed = false
+					}
+				}
+
+				if newPossibleBreed {
+					*patient.PossibleBreed = append(*patient.PossibleBreed, breed)
+				}
 			}
 			if sex, ok := patientData["sex"].(string); ok && sex != "" {
 				patient.Sex = &sex
