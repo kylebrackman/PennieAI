@@ -8,7 +8,7 @@ type Patient struct {
 	ID              int        `json:"id" db:"id"`
 	Name            string     `json:"name" db:"name"`
 	PossibleSpecies *[]string  `json:"possibleSpecies" db:"possible_species"`
-	PossibleBreed   *[]string  `json:"breed" db:"breed"`
+	PossibleBreed   *[]string  `json:"possibleBreed" db:"possible_breed"`
 	Sex             *string    `json:"sex" db:"sex"`
 	DateOfBirth     *time.Time `json:"date_of_birth" db:"date_of_birth"`
 	Weight          *float64   `json:"weight" db:"weight"`

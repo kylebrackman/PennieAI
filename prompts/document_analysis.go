@@ -15,8 +15,8 @@ Return a structured JSON object with the documents and patient in this shape:
 {
   patient: {
     name: string;
-    species: string;
-    breed: string;
+    possibleSpecies: string;
+    possibleBreed: string;
     sex: string;
     date_of_birth: string; // date in yyyy-MM-dd format
     weight: string;

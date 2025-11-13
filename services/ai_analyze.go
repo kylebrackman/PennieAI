@@ -87,16 +87,25 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 			if name, ok := patientData["name"].(string); ok && name != "" {
 				patient.Name = name
 			}
-			if species, ok := patientData["species"].(string); ok && species != "" {
+			if species, ok := patientData["possibleSpecies"].(string); ok && species != "" {
 				// First, check if the pointer is nil
 				if patient.PossibleSpecies == nil {
 					// If it's nil, initialize it with a pointer to an empty slice
 					patient.PossibleSpecies = &[]string{}
 				}
-				// Now dereference the pointer and append to the slice
-				*patient.PossibleSpecies = append(*patient.PossibleSpecies, species)
+
+				newPossibleSpecies := true
+
+				for _, possibleSpecies := range *patient.PossibleSpecies {
+					if possibleSpecies == species {
+						newPossibleSpecies = false
+					}
+				}
+				if newPossibleSpecies {
+					*patient.PossibleSpecies = append(*patient.PossibleSpecies, species)
+				}
 			}
-			if breed, ok := patientData["breed"].(string); ok && breed != "" {
+			if breed, ok := patientData["possibleBreed"].(string); ok && breed != "" {
 				if patient.PossibleBreed == nil {
 					patient.PossibleBreed = &[]string{}
 				}

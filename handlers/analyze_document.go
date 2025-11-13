@@ -1,11 +1,19 @@
 package handlers
 
 import (
+	"PennieAI/models"
 	"PennieAI/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+type AnalyzeResponse struct {
+	Message   string                    `json:"message"`
+	Count     int                       `json:"count"`
+	Patient   *models.Patient           `json:"patient"`
+	Documents []models.AnalyzedDocument `json:"documents"`
+}
 
 func AnalyzeUnprocessedDocument(c *gin.Context) {
 	// Placeholder for analyzing an unprocessed document
@@ -31,10 +39,10 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":   "Document analyzed successfully",
-		"count":     len(analyzedDocuments),
-		"patient":   patient,
-		"documents": analyzedDocuments,
+	c.JSON(http.StatusOK, AnalyzeResponse{
+		Message:   "Document analyzed successfully",
+		Count:     len(analyzedDocuments),
+		Patient:   patient,
+		Documents: analyzedDocuments,
 	})
 }
