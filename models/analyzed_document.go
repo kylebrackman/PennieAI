@@ -13,4 +13,5 @@ type AnalyzedDocument struct {
 	UnprocessedDocumentId int64     `json:"unprocessedDocumentId" db:"unprocessed_document_id"`
 	CreatedAt             time.Time `json:"createdAt" db:"created_at"`
 	UpdatedAt             time.Time `json:"updatedAt" db:"updated_at"`
+	WindowLines           []string  `json:"windowLines" db:"window_lines"`
 }

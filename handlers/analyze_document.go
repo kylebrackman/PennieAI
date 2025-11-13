@@ -32,9 +32,9 @@ func AnalyzeUnprocessedDocument(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+		"message":   "Document analyzed successfully",
+		"count":     len(analyzedDocuments),
 		"patient":   patient,
 		"documents": analyzedDocuments,
-		"count":     len(analyzedDocuments),
-		"message":   "Document analyzed successfully",
 	})
 }

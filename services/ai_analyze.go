@@ -124,12 +124,16 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 						}
 					}
 
+					windowStartLine := startLine - int64(window.StartIndex)
+					windowEndLine := endLine - int64(window.StartIndex)
+
 					if !isDuplicate {
 						analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
 							Title:         title,
 							StartLine:     startLine,
 							EndLine:       endLine,
 							NumberOfLines: numberOfLines,
+							WindowLines:   window.WindowLines[windowStartLine:windowEndLine],
 						})
 					}
 				}
