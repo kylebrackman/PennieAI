@@ -18,8 +18,8 @@ func main() {
 		log.Println("No .env file found, using system environment variables")
 	}
 
-	// Initialize database connection
 	config.InitDatabase()
+	config.InitRedis()
 
 	// Gracefully close database connection when main exits
 	defer func() {
@@ -44,7 +44,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	
+
 	// Start server
 	log.Printf("🐾 PennieAI API starting on port %s...", port)
 	log.Printf("📍 Health check: http://localhost:%s/health", port)
