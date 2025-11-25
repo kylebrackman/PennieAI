@@ -1,4 +1,5 @@
 # PennieAI
+## Backend
 
 **AI-Powered Veterinary Document Analysis System**
 
@@ -457,16 +458,6 @@ go run main.go
 
 ---
 
-### Bonus: Advanced Patterns (Future)
-
-- **Event-Driven Architecture**: Event sourcing, Kafka/NATS
-- **CQRS**: Separate read/write models
-- **GraphQL**: Alternative to REST
-- **gRPC**: For inter-service communication
-- **Microservices**: Split into specialized services as needed
-
----
-
 ## Current Progress
 
 ### What Works Today
@@ -487,25 +478,10 @@ go run main.go
 
 ---
 
-## Contributing
-
-This is a learning project focused on building production-ready systems. Contributions are welcome!
-
-### How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests (when available)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
-
 ### Development Principles
 
 - **Learn by Building**: This project prioritizes learning production patterns
 - **Incremental Improvement**: Each phase adds new capabilities
-- **Documentation**: Document what you learn for future reference
 - **Best Practices**: Follow Go idioms and industry standards
 
 ---
@@ -516,16 +492,6 @@ This project is built following industry best practices. Check `learning_resourc
 - Q&A documents explaining complex concepts
 - Notes on design decisions
 - Links to helpful articles and tutorials
-
-**Recommended Reading:**
-- "Designing Data-Intensive Applications" by Martin Kleppmann
-- "The Go Programming Language" by Donovan & Kernighan
-- "Site Reliability Engineering" by Google
-
-**Online Resources:**
-- [Go by Example](https://gobyexample.com)
-- [Redis University](https://redis.io/university)
-- [OpenAI API Documentation](https://platform.openai.com/docs)
 
 ---
 
