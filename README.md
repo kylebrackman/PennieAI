@@ -346,23 +346,10 @@ go run main.go
 
 ---
 
-## Learning Resources
-
-This project is built following industry best practices. Check `learning_resources/` for:
-- Q&A documents explaining complex concepts
-- Notes on design decisions
-- Links to helpful articles and tutorials
-
----
-
-## Acknowledgments
-
-Built with:
+## Built with:
 - OpenAI GPT-4 for intelligent document analysis
 - Go community for excellent libraries
 - Redis Labs for caching and rate limiting patterns
 - My wife, for veterinary expertise.
 
 ---
-
-**PennieAI** - Transforming veterinary document analysis, one AI call at a time. 🐾
