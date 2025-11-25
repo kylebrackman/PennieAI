@@ -47,8 +47,10 @@ func SetupRoutes(router *gin.Engine) {
 		// Unprocessed document routes
 		unprocessedDocuments := v1.Group("/unprocessed")
 		{
-			unprocessedDocuments.GET("", handlers.GetAllUnprocessedDocuments)          // GET /api/v1/unprocessed
-			unprocessedDocuments.POST("/analyze", handlers.AnalyzeUnprocessedDocument) // POST /api/v1/unprocessed/analyze
+			unprocessedDocuments.GET("", handlers.GetAllUnprocessedDocuments)
+			unprocessedDocuments.POST("/analyze",
+				middleware.OpenAIRateLimiter(),
+				handlers.AnalyzeUnprocessedDocument)
 		}
 
 	}
