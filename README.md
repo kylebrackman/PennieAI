@@ -170,7 +170,6 @@ PennieAI/
 │   └── get_file_lines.go            # File parsing utilities
 ├── mock_data/                       # Sample veterinary documents
 ├── learning_resources/              # Documentation & learning notes
-└── learning-roadmap-checklist.md    # Development roadmap
 ```
 
 ---
@@ -289,52 +288,6 @@ GET /health
 
 ---
 
-#### Analyze Unprocessed Document
-Upload a document for AI analysis.
-
-```http
-POST /api/v1/unprocessed/analyze
-Content-Type: multipart/form-data
-```
-
-**Request:**
-- `document` (file): The document to analyze (TXT, PDF, etc.)
-
-**Response:**
-```json
-{
-  "message": "Document analyzed successfully",
-  "count": 3,
-  "patient": {
-    "id": 0,
-    "name": "Bella",
-    "possibleSpecies": ["Dog"],
-    "possibleBreed": ["Golden Retriever"],
-    "sex": "Female",
-    "date_of_birth": "2019-05-15",
-    "weight": 28.5,
-    "height": null,
-    "color": "Golden",
-    "created_at": "2025-01-15T10:30:00Z",
-    "updated_at": "2025-01-15T10:30:00Z"
-  },
-  "documents": [
-    {
-      "id": 0,
-      "title": "Initial Consultation Notes",
-      "content": "",
-      "numberOfLines": 45,
-      "patientId": 0,
-      "startLine": 1,
-      "endLine": 45,
-      "unprocessedDocumentId": 0,
-      "createdAt": "2025-01-15T10:30:00Z",
-      "updatedAt": "2025-01-15T10:30:00Z",
-      "windowLines": ["Line 1...", "Line 2..."]
-    }
-  ]
-}
-```
 
 **Rate Limiting:**
 - 100 requests per hour per IP address
@@ -342,107 +295,6 @@ Content-Type: multipart/form-data
   - `X-RateLimit-Limit`: 100
   - `X-RateLimit-Remaining`: 99
   - `X-RateLimit-Reset`: Unix timestamp
-
----
-
-#### Get All Analyzed Documents
-```http
-GET /api/v1/documents
-```
-
-**Response:**
-```json
-{
-  "documents": [
-    {
-      "id": 1,
-      "title": "Lab Report - Blood Work",
-      "content": "...",
-      "numberOfLines": 87,
-      "patientId": 1,
-      "startLine": 1,
-      "endLine": 87,
-      "unprocessedDocumentId": 1,
-      "createdAt": "2025-01-15T10:30:00Z",
-      "updatedAt": "2025-01-15T10:30:00Z"
-    }
-  ]
-}
-```
-
----
-
-#### Get Document by ID
-```http
-GET /api/v1/documents/:id
-```
-
-**Response:**
-```json
-{
-  "document": {
-    "id": 1,
-    "title": "Lab Report - Blood Work",
-    "content": "...",
-    "numberOfLines": 87,
-    "patientId": 1,
-    "startLine": 1,
-    "endLine": 87,
-    "unprocessedDocumentId": 1,
-    "createdAt": "2025-01-15T10:30:00Z",
-    "updatedAt": "2025-01-15T10:30:00Z"
-  }
-}
-```
-
----
-
-#### Create Document
-```http
-POST /api/v1/documents
-Content-Type: application/json
-```
-
-**Request:**
-```json
-{
-  "title": "Physical Exam Notes",
-  "content": "Patient appears healthy...",
-  "patientId": 1
-}
-```
-
----
-
-#### Delete Document
-```http
-DELETE /api/v1/documents/:id
-```
-
-**Response:**
-```json
-{
-  "message": "Document deleted successfully"
-}
-```
-
----
-
-#### Test AI Service
-```http
-GET /api/v1/ai_tool/test
-```
-
-Tests connectivity to OpenAI API.
-
----
-
-#### Get AI Model Version
-```http
-GET /api/v1/ai_tool/model_version
-```
-
-Returns the current OpenAI model being used.
 
 ---
 
@@ -461,36 +313,10 @@ air
 go run main.go
 ```
 
-### Testing with Redis
-
-```bash
-# Check if Redis is running
-redis-cli ping
-# Should return: PONG
-
-# Monitor Redis commands in real-time
-redis-cli monitor
-
-# Check rate limit keys
-redis-cli KEYS "ratelimit:*"
-```
-
-### Database Migrations
-
-Currently, database schema is managed manually. Database migrations (using tools like `goose` or `migrate`) are planned for Phase 7.
-
-### Code Style
-
-- Follow standard Go formatting: `go fmt ./...`
-- Run linters: `go vet ./...`
-- Use descriptive variable names
-- Comment complex logic (especially in `ai_analyze.go`)
 
 ---
 
 ## Roadmap
-
-PennieAI is on a journey from a CRUD application to a production-ready, observable, and scalable system. See `learning-roadmap-checklist.md` for the complete roadmap.
 
 ### Phase 1: Redis - Caching & Rate Limiting ✅ (In Progress)
 
@@ -703,19 +529,13 @@ This project is built following industry best practices. Check `learning_resourc
 
 ---
 
-## License
-
-[Add your license here]
-
----
-
 ## Acknowledgments
 
 Built with:
 - OpenAI GPT-4 for intelligent document analysis
 - Go community for excellent libraries
 - Redis Labs for caching and rate limiting patterns
-- The veterinary community for domain expertise
+- My wife, for veterinary expertise.
 
 ---
 
