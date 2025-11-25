@@ -9,12 +9,14 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// Package-level Redis client variable
-// Similar to how we store the database connection, we store a Redis client
-// that can be shared across the application
+/*
+*
+Package-level Redis client variable
+Similar to how we store the database connection, we store a Redis client
+that can be shared across the application
+*/
 var RedisClient *redis.Client
 
-// InitRedis initializes the Redis connection
 func InitRedis() {
 	// Get Redis URL from environment, with a sensible default for local dev
 	redisAddr := os.Getenv("REDIS_URL")
