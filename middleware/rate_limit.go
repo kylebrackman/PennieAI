@@ -22,9 +22,9 @@ type RateLimitConfig struct {
 
 // DefaultOpenAIRateLimit provides sensible defaults for OpenAI API rate limiting
 var DefaultOpenAIRateLimit = RateLimitConfig{
-	MaxRequests: 100,                 // 100 requests per window
-	Window:      time.Hour,           // 1 hour window
-	KeyPrefix:   "ratelimit:openai:", // Redis key prefix
+	MaxRequests: 100,                // 100 requests per window
+	Window:      time.Hour,          // 1 hour window
+	KeyPrefix:   "ratelimit:openai", // Redis key prefix
 }
 
 // RateLimiter creates a rate limiting middleware using Redis
@@ -33,12 +33,9 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 		// Get Redis client from config package
 		rdb := config.GetRedis()
 
-		// Get user identifier (for now, we'll use IP address)
-		// TODO: Replace with actual user ID when authentication is implemented
-		userID := c.ClientIP()
+		userID := "::123"
 
-		// Create Redis key: "ratelimit:openai:192.168.1.1"
-		key := fmt.Sprintf("%s%s", rateLimitConfig.KeyPrefix, userID)
+		key := fmt.Sprintf("%s:%s", rateLimitConfig.KeyPrefix, userID)
 
 		// Create context with timeout to prevent hanging
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
