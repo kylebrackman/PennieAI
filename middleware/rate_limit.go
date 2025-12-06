@@ -86,7 +86,6 @@ func enforceRateLimit(ctx context.Context, rdb *redis.Client, key string, rateLi
 		}
 	}
 
-	// Get the TTL (time to live) to know when the limit resets
 	ttl, err := rdb.TTL(ctx, key).Result()
 	if err != nil {
 		return nil, err
