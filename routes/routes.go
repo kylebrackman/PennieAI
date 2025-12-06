@@ -9,7 +9,6 @@ import (
 	"PennieAI/middleware"
 )
 
-// SetupRoutes configures all application routes
 func SetupRoutes(router *gin.Engine) {
 	// Basic middlewares
 	router.Use(gin.Logger())
@@ -25,11 +24,9 @@ func SetupRoutes(router *gin.Engine) {
 		})
 	})
 
-	// API versioning
 	v1 := router.Group("/api/v1")
 	{
 
-		// Document management routes
 		documents := v1.Group("/documents")
 		{
 			documents.GET("", handlers.GetAllAnalyzedDocuments) // GET /api/v1/documents
@@ -44,7 +41,6 @@ func SetupRoutes(router *gin.Engine) {
 			aiTool.GET("/model_version", handlers.GetAiModelVersion)
 		}
 
-		// Unprocessed document routes
 		unprocessedDocuments := v1.Group("/unprocessed")
 		{
 			unprocessedDocuments.GET("", handlers.GetAllUnprocessedDocuments)
@@ -55,7 +51,6 @@ func SetupRoutes(router *gin.Engine) {
 
 	}
 
-	// Catch-all route for API documentation or 404
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error":   "Endpoint not found",
