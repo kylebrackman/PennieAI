@@ -14,9 +14,9 @@ import (
 )
 
 type RateLimitConfig struct {
-	MaxRequests int           // Maximum number of requests allowed
-	Window      time.Duration // Time window for the limit (e.g., 1 hour)
-	KeyPrefix   string        // Prefix for Redis keys (e.g., "ratelimit:openai:")
+	MaxRequests int
+	Window      time.Duration
+	KeyPrefix   string // Prefix for Redis keys (e.g., "ratelimit:openai:")
 }
 
 var DefaultOpenAIRateLimit = RateLimitConfig{
@@ -25,7 +25,6 @@ var DefaultOpenAIRateLimit = RateLimitConfig{
 	KeyPrefix:   "ratelimit:openai", // Redis key prefix
 }
 
-// RateLimiter creates a rate limiting middleware using Redis
 func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rdb := config.GetRedis()
@@ -68,15 +67,12 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 	}
 }
 
-// checkRateLimit implements the rate limiting algorithm using Redis
 func checkRateLimit(ctx context.Context, rdb *redis.Client, key string, rateLimitConfig RateLimitConfig) (bool, int, time.Time, error) {
-	// Use Redis INCR to atomically increment the counter
 	count, err := rdb.Incr(ctx, key).Result()
 	if err != nil {
 		return false, 0, time.Time{}, err
 	}
 
-	// If this is the first request (count == 1), set the expiration
 	if count == 1 {
 		err = rdb.Expire(ctx, key, rateLimitConfig.Window).Err()
 		if err != nil {
