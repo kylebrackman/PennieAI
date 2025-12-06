@@ -13,14 +13,12 @@ import (
 	"PennieAI/config"
 )
 
-// RateLimitConfig holds configuration for rate limiting
 type RateLimitConfig struct {
 	MaxRequests int           // Maximum number of requests allowed
 	Window      time.Duration // Time window for the limit (e.g., 1 hour)
 	KeyPrefix   string        // Prefix for Redis keys (e.g., "ratelimit:openai:")
 }
 
-// DefaultOpenAIRateLimit provides sensible defaults for OpenAI API rate limiting
 var DefaultOpenAIRateLimit = RateLimitConfig{
 	MaxRequests: 100,                // 100 requests per window
 	Window:      time.Hour,          // 1 hour window
@@ -30,7 +28,6 @@ var DefaultOpenAIRateLimit = RateLimitConfig{
 // RateLimiter creates a rate limiting middleware using Redis
 func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Get Redis client from config package
 		rdb := config.GetRedis()
 
 		userID := "::123"
@@ -57,18 +54,16 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 		c.Header("X-RateLimit-Remaining", strconv.Itoa(remaining))
 		c.Header("X-RateLimit-Reset", strconv.FormatInt(resetTime.Unix(), 10))
 
-		// If rate limit exceeded, reject the request
 		if !allowed {
 			c.JSON(http.StatusTooManyRequests, gin.H{
 				"error":       "Rate limit exceeded",
 				"message":     fmt.Sprintf("You have exceeded the rate limit of %d requests per %v", rateLimitConfig.MaxRequests, rateLimitConfig.Window),
 				"retry_after": resetTime.Sub(time.Now()).Seconds(),
 			})
-			c.Abort() // Stop processing this request
+			c.Abort()
 			return
 		}
 
-		// Rate limit not exceeded, continue with the request
 		c.Next()
 	}
 }
@@ -95,22 +90,18 @@ func checkRateLimit(ctx context.Context, rdb *redis.Client, key string, rateLimi
 		return false, 0, time.Time{}, err
 	}
 
-	// Calculate reset time
 	resetTime := time.Now().Add(ttl)
 
-	// Calculate remaining requests
 	remaining := rateLimitConfig.MaxRequests - int(count)
 	if remaining < 0 {
 		remaining = 0
 	}
 
-	// Check if limit exceeded
 	allowed := count <= int64(rateLimitConfig.MaxRequests)
 
 	return allowed, remaining, resetTime, nil
 }
 
-// OpenAIRateLimiter is a convenience function for rate limiting OpenAI API calls
 func OpenAIRateLimiter() gin.HandlerFunc {
 	return RateLimiter(DefaultOpenAIRateLimit)
 }
