@@ -42,7 +42,7 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 		defer cancel()
 
-		allowed, remaining, resetTime, err := enforceRateLimit(ctx, rdb, key, rateLimitConfig)
+		erlResult, err := enforceRateLimit(ctx, rdb, key, rateLimitConfig)
 
 		if err != nil {
 			// If Redis fails, log the error but allow the request through
@@ -56,14 +56,14 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 
 		// Add rate limit headers to response (standard practice)
 		c.Header("X-RateLimit-Limit", strconv.Itoa(rateLimitConfig.MaxRequests))
-		c.Header("X-RateLimit-Remaining", strconv.Itoa(remaining))
-		c.Header("X-RateLimit-Reset", strconv.FormatInt(resetTime.Unix(), 10))
+		c.Header("X-RateLimit-Remaining", strconv.Itoa(erlResult.Remaining))
+		c.Header("X-RateLimit-Reset", strconv.FormatInt(erlResult.ResetTime.Unix(), 10))
 
-		if !allowed {
+		if !erlResult.Allowed {
 			c.JSON(http.StatusTooManyRequests, gin.H{
 				"error":       "Rate limit exceeded",
 				"message":     fmt.Sprintf("You have exceeded the rate limit of %d requests per %v", rateLimitConfig.MaxRequests, rateLimitConfig.Window),
-				"retry_after": resetTime.Sub(time.Now()).Seconds(),
+				"retry_after": erlResult.ResetTime.Sub(time.Now()).Seconds(),
 			})
 			c.Abort()
 			return
@@ -73,35 +73,39 @@ func RateLimiter(rateLimitConfig RateLimitConfig) gin.HandlerFunc {
 	}
 }
 
-func enforceRateLimit(ctx context.Context, rdb *redis.Client, key string, rateLimitConfig RateLimitConfig) (bool, int, time.Time, error) {
+func enforceRateLimit(ctx context.Context, rdb *redis.Client, key string, rateLimitConfig RateLimitConfig) (*RateLimitResult, error) {
 	count, err := rdb.Incr(ctx, key).Result()
 	if err != nil {
-		return false, 0, time.Time{}, err
+		return nil, err
 	}
 
 	if count == 1 {
-		err = rdb.Expire(ctx, key, rateLimitConfig.Window).Err() // What is .Err()?
+		err = rdb.Expire(ctx, key, rateLimitConfig.Window).Err()
 		if err != nil {
-			return false, 0, time.Time{}, err
+			return nil, err
 		}
 	}
 
 	// Get the TTL (time to live) to know when the limit resets
-	ttl, err := rdb.TTL(ctx, key).Result() // why do we pass ctx again here? is it so that this entire flow can be cancelled if it's been over 2 seconds overall?
+	ttl, err := rdb.TTL(ctx, key).Result()
 	if err != nil {
-		return false, 0, time.Time{}, err
+		return nil, err
 	}
 
-	resetTime := time.Now().Add(ttl) // Why are we adding ttl to now? does this mean on every request the reset time is pushed further out?
+	resetTime := time.Now().Add(ttl)
 
-	remaining := rateLimitConfig.MaxRequests - int(count) // Why do we cast count to int here?
+	remaining := rateLimitConfig.MaxRequests - int(count)
 	if remaining < 0 {
-		remaining = 0 // Are we just setting remaining to 0 if it's negative so we don't return a negative number in the header?
+		remaining = 0
 	}
 
 	allowed := count <= int64(rateLimitConfig.MaxRequests)
 
-	return allowed, remaining, resetTime, nil
+	return &RateLimitResult{
+		Allowed:   allowed,
+		Remaining: remaining,
+		ResetTime: resetTime,
+	}, nil
 }
 
 func OpenAIRateLimiter() gin.HandlerFunc {
