@@ -16,7 +16,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 	var patient models.Patient
 	var analyzedDocuments []models.AnalyzedDocument
 
-	// Get file lines
 	fileLines, err := utils.GetFileLines(file)
 	if err != nil {
 		return nil, nil, err
@@ -24,7 +23,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 
 	windows := utils.WindowBuilder(fileLines, nil)
 
-	// Process each window
 	for _, window := range windows {
 		// Build incremental notice if we have previous documents
 		// Build incremental notice if we have previous documents
@@ -35,13 +33,7 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		promptBuilder.WriteString(prompts.BasePrompt)
 
 		if len(analyzedDocuments) > 0 {
-
-			// Convert patient struct to pretty JSON string
-			// Example: {"name": "Bella", "species": "Dog", "breed": "Golden Retriever"}
 			patientJSON, _ := json.MarshalIndent(patient, "  ", "  ")
-
-			// Convert documents slice to pretty JSON array string
-			// Example: [{"title": "Lab Report", "start_line": 1, "end_line": 45}, ...]
 			docsJSON, _ := json.MarshalIndent(analyzedDocuments, "  ", "  ")
 			incrementalNotice = fmt.Sprintf(prompts.IncrementalNoticeTemplate, patientJSON, docsJSON)
 
@@ -49,18 +41,12 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 
 			promptBuilder.WriteString(incrementalNotice)
 
-			// Insert the JSON strings into the template
-			// The template has two %s placeholders - one for patient, one for documents
-			// This creates a message like:
-			// "Here's the current patient: {patient JSON}
-			//  Here's what you already found: [documents JSON]"
 			promptBuilder.WriteString("\n")
 		}
 		promptBuilder.WriteString("Here is the text chunk:\n")
 
 		for lineIndex, line := range window.WindowLines {
 			lineNumber := window.StartIndex + lineIndex + 1
-			// "#{lineNumber}: #{line}\n"
 			promptBuilder.WriteString(fmt.Sprintf("%d: %s\n", lineNumber, line))
 		}
 
@@ -80,7 +66,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 
 		fmt.Printf("OpenAI Response: %+v\n", response)
 
-		// Extract and merge patient data from response
 		// See Q&A 2025-10-14 for more info on this syntax
 		if patientData, ok := response["patient"].(map[string]interface{}); ok {
 			// Merge patient fields (prefer non-empty values)

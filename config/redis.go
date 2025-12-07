@@ -9,27 +9,17 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-/*
-*
-Package-level Redis client variable
-Similar to how we store the database connection, we store a Redis client
-that can be shared across the application
-*/
 var RedisClient *redis.Client
 
 func InitRedis() {
-	// Get Redis URL from environment, with a sensible default for local dev
 	redisAddr := os.Getenv("REDIS_URL")
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
 		log.Println("⚠️  REDIS_URL not set, using default:", redisAddr)
 	}
 
-	// Get optional password from environment
 	redisPassword := os.Getenv("REDIS_PASSWORD")
 
-	// Create Redis client
-	// redis.NewClient returns a pointer to redis.Client
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     redisAddr,     // Redis server address (host:port)
 		Password: redisPassword, // Password (empty string if no password)
@@ -53,8 +43,6 @@ func InitRedis() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel() // Always clean up context resources
 
-	// Ping Redis to verify connection
-	// Ping() returns (string, error) - we only care about the error
 	_, err := RedisClient.Ping(ctx).Result()
 	if err != nil {
 		log.Fatal("Failed to connect to Redis:", err)
@@ -63,9 +51,6 @@ func InitRedis() {
 	log.Println("✅ Redis connected successfully")
 }
 
-// GetRedis returns the Redis client instance
-// Similar to GetDB(), this provides safe access to the Redis client
-// with a nil check to prevent crashes
 func GetRedis() *redis.Client {
 	if RedisClient == nil {
 		log.Fatal("Redis not initialized. Call InitRedis() first.")
@@ -73,7 +58,6 @@ func GetRedis() *redis.Client {
 	return RedisClient
 }
 
-// CloseRedis closes the Redis connection
 // Should be called when the application shuts down
 func CloseRedis() error {
 	if RedisClient != nil {
