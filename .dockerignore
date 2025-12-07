@@ -1,0 +1,7 @@
+.git
+.env
+tmp/
+*.log
+.DS_Store
+.idea/
+*.md

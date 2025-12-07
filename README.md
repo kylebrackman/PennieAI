@@ -92,7 +92,9 @@ This allows PennieAI to handle documents of unlimited length while maintaining c
 
 #### Start docker in Development mode with:
 
-`docker-compose -f docker-compose.dev.yml up -d`
+`docker-compose -f docker-compose.dev.yml up`
+
+Add the -d flag to run in detached mode if you would like to keep your terminal free.
 
 #### Ensure that it is running with:
 
