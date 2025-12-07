@@ -12,8 +12,7 @@ PennieAI is a production-focused veterinary assistant that streamlines clinical 
 - [Overview](#overview)
 - [Current Features](#current-features)
 - [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
+- [Sliding Window Approach](#sliding-window-approach)
 - [Getting Started](#getting-started)
 - [API Documentation](#api-documentation)
 - [Development](#development)
@@ -70,29 +69,7 @@ PennieAI automates this process by:
 
 ---
 
-## Architecture
-
-### High-Level Flow
-
-```
-User Upload (PDF/TXT)
-    ↓
-[Gin HTTP Handler]
-    ↓
-[Rate Limit Middleware] (Redis)
-    ↓
-[Document Segmenter] (Sliding Window)
-    ↓
-[OpenAI API] (GPT-4 Analysis)
-    ↓
-[Data Extraction & Deduplication]
-    ↓
-[PostgreSQL Storage]
-    ↓
-JSON Response (Patient + Documents)
-```
-
-### Sliding Window Algorithm
+## Sliding Window Approach
 
 PennieAI uses a sophisticated sliding window approach to process large documents:
 
@@ -106,6 +83,20 @@ PennieAI uses a sophisticated sliding window approach to process large documents
 4. **Deduplication**: New findings are merged with existing data, avoiding duplicates by comparing line numbers
 
 This allows PennieAI to handle documents of unlimited length while maintaining context and avoiding redundant processing.
+
+---
+
+## Getting Started
+
+### Running locally in docker
+
+#### Start docker in Development mode with:
+
+`docker-compose -f docker-compose.dev.yml up -d`
+
+#### Ensure that it is running with:
+
+`docker-compose -f docker-compose.dev.yml ps`
 
 ---
 
