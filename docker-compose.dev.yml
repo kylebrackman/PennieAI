@@ -1,6 +1,23 @@
 version: '3.8'
 
-# Development mode: Databases in Docker, Go app runs locally
+# ============================================================================
+# DEVELOPMENT DOCKER COMPOSE
+# ============================================================================
+# This setup runs databases AND the Go application in Docker containers.
+#
+# MIGRATION STRATEGY:
+# - Development: Migrations run automatically when app container starts
+#   - Simple workflow: `docker-compose up` and everything just works
+#   - Migrations embedded in app startup (see main.go)
+#   - Acceptable because: only 1 app instance, restarts are fine, speed not critical
+#
+# - Production: Migrations run in SEPARATE container (see docker-compose.prod.yml)
+#   - Prevents race conditions with multiple app instances
+#   - Enables zero-downtime deployments
+#   - Allows migration validation before deploying new app version
+#   - Pattern: Run migration container → Wait for success → Deploy app containers
+# ============================================================================
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -19,6 +36,8 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - pennieai-network
 
   redis:
     image: redis:7-alpine
@@ -34,29 +53,53 @@ services:
       timeout: 3s
       retries: 5
     restart: unless-stopped
+    networks:
+      - pennieai-network
 
+  # ============================================================================
+  # PennieAI Application (with embedded migrations)
+  # ============================================================================
+  # DEVELOPMENT MODE:
+  # - Migrations run automatically on startup via config.RunMigrations() in main.go
+  # - Air provides hot reload for code changes
+  # - Safe because only one instance runs locally
+  #
+  # IMPORTANT: In production, migrations will run in a separate init container
+  # to support multiple app instances and zero-downtime deployments.
+  # ============================================================================
   app:
     build:
       context: .
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile.dev
     container_name: pennieai-app-dev
     ports:
       - "8080:8080"
     volumes:
-      - .:/app
-      - /app/tmp  # Exclude Air's tmp directory
+      - .:/app                    # Mount source code for hot reload
+      - /app/tmp                  # Exclude Air's tmp directory from host sync
     environment:
+      # Database connection uses service name 'postgres' as hostname
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_DEV}?sslmode=disable
       - REDIS_URL=redis:6379
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PORT=8080
+      - GIN_MODE=debug            # Verbose logging in development
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_healthy  # Wait for DB to be ready before starting
       redis:
-        condition: service_healthy
-    command: air -c .air.toml
+        condition: service_healthy  # Wait for Redis to be ready
+    networks:
+      - pennieai-network
+    command: air -c .air.toml     # Hot reload via Air
+
+networks:
+  pennieai-network:
+    driver: bridge
 
 volumes:
   postgres_dev_data:
+  # PostgreSQL data persists between container restarts
+  # To reset: docker-compose down -v (WARNING: destroys all data)
   redis_dev_data:
+  # Redis data persists between container restarts
