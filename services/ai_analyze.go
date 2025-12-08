@@ -56,7 +56,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 			StartLine: 0,
 			EndLine:   1,
 		})
-		fmt.Println(promptBuilder.String())
 
 		response, err := aiService.Query(context.Background(), promptBuilder.String(), nil)
 
