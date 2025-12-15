@@ -20,6 +20,9 @@ func main() {
 
 	config.InitDatabase()
 	config.InitRedis()
+	if os.Getenv("RUN_MIGRATIONS") != "false" {
+		config.RunMigrations(databaseURL)
+	}
 
 	// Gracefully close database connection when main exits
 	defer func() {
