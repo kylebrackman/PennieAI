@@ -1,6 +1,6 @@
 -- Create users table
 CREATE TABLE users (
-                       id SERIAL UNIQUE not null PRIMARY KEY,
+                       id SERIAL PRIMARY KEY,
                        email VARCHAR(255) UNIQUE NOT NULL,
                        first_name VARCHAR(100),
                        last_name VARCHAR(100),
@@ -9,7 +9,6 @@ CREATE TABLE users (
                        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE INDEX idx_users_firebase_uid ON users(firebase_uid);
 CREATE INDEX idx_users_email ON users(email);
 
 -- Create patients table
