@@ -21,7 +21,10 @@ func main() {
 	config.InitDatabase()
 	config.InitRedis()
 	if os.Getenv("RUN_MIGRATIONS") != "false" {
-		config.RunMigrations(databaseURL)
+		err = config.RunMigrations(databaseURL)
+		if err != nil {
+			log.Fatal("Failed to run migrations:", err)
+		}
 	}
 
 	// Gracefully close database connection when main exits
