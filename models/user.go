@@ -6,7 +6,6 @@ import (
 
 type User struct {
 	ID           int        `json:"id" db:"id"`
-	FirebaseUID  string     `json:"firebase_uid" db:"firebase_uid"`
 	Email        string     `json:"email" db:"email"`
 	FirstName    *string    `json:"first_name" db:"first_name"`
 	LastName     *string    `json:"last_name" db:"last_name"`

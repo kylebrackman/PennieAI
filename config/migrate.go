@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -11,7 +12,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func RunMigrations(databaseURL string) error {
+func RunMigrations() error {
+
+	environment := os.Getenv("ENV")
+	// If ENV is not set, default to development for convenience
+	if environment == "" {
+		environment = "development"
+	}
+	if environment != "development" {
+		log.Println("Environment is not development, skipping automatic migrations.")
+		return nil
+	}
 	db := GetDB()
 
 	/*

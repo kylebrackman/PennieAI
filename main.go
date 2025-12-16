@@ -21,7 +21,7 @@ func main() {
 	config.InitDatabase()
 	config.InitRedis()
 	if os.Getenv("RUN_MIGRATIONS") != "false" {
-		err = config.RunMigrations(databaseURL)
+		err = config.RunMigrations()
 		if err != nil {
 			log.Fatal("Failed to run migrations:", err)
 		}
