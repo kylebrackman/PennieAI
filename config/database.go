@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq" // PostgreSQL driver
+	_ "github.com/lib/pq"
 )
 
 var DB *sqlx.DB

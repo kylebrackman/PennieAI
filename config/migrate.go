@@ -15,7 +15,6 @@ import (
 func RunMigrations() error {
 
 	environment := os.Getenv("ENV")
-	// If ENV is not set, default to development for convenience
 	if environment == "" {
 		environment = "development"
 	}
@@ -35,8 +34,8 @@ func RunMigrations() error {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations", // Path to migration files
-		"postgres",          // Database driver name
+		"file://migrations",
+		"postgres", // Database driver name
 		driver,
 	)
 	if err != nil {
