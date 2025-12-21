@@ -18,8 +18,21 @@ func main() {
 		log.Println("No .env file found, using system environment variables")
 	}
 
-	config.InitDatabase()
-	config.InitRedis()
+	err = config.InitFirebase()
+	if err != nil {
+		log.Fatal("Failed to initialize Firebase:", err)
+	}
+
+	err = config.InitDatabase()
+	if err != nil {
+		log.Fatal("Failed to initialize database:", err)
+	}
+
+	err = config.InitRedis()
+	if err != nil {
+		log.Fatal("Failed to initialize redis:", err)
+	}
+
 	if os.Getenv("RUN_MIGRATIONS") != "false" {
 		err = config.RunMigrations()
 		if err != nil {
@@ -27,7 +40,6 @@ func main() {
 		}
 	}
 
-	// Gracefully close database connection when main exits
 	defer func() {
 		if err := config.CloseDatabase(); err != nil {
 			log.Printf("Error closing database: %v", err)

@@ -11,7 +11,7 @@ import (
 
 var RedisClient *redis.Client
 
-func InitRedis() {
+func InitRedis() error {
 	redisAddr := os.Getenv("REDIS_URL")
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
@@ -45,10 +45,11 @@ func InitRedis() {
 
 	_, err := RedisClient.Ping(ctx).Result()
 	if err != nil {
-		log.Fatal("Failed to connect to Redis:", err)
+		return err
 	}
 
 	log.Println("✅ Redis connected successfully")
+	return nil
 }
 
 func GetRedis() *redis.Client {

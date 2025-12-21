@@ -10,7 +10,7 @@ import (
 
 var DB *sqlx.DB
 
-func InitDatabase() {
+func InitDatabase() error {
 	var err error
 
 	databaseUrl := os.Getenv("DATABASE_URL")
