@@ -1,0 +1,3 @@
+ALTER TABLE users
+    ADD COLUMN firebase_uid VARCHAR(128) UNIQUE NOT NULL,
+    ADD COLUMN photo_url TEXT;

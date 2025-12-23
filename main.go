@@ -18,7 +18,7 @@ func main() {
 		log.Println("No .env file found, using system environment variables")
 	}
 
-	err = config.InitFirebase()
+	_, err = config.InitFirebase()
 	if err != nil {
 		log.Fatal("Failed to initialize Firebase:", err)
 	}
