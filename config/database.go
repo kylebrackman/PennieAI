@@ -33,6 +33,7 @@ func InitDatabase() error {
 	}
 
 	log.Println("✅ Database connected successfully")
+	return nil
 }
 
 func GetDB() *sqlx.DB {
