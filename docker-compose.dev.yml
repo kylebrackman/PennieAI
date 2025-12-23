@@ -45,11 +45,13 @@ services:
     volumes:
       - .:/app
       - /app/tmp  # Exclude Air's tmp directory
+      - ./firebase-service-account.json:/app/firebase-service-account.json
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB_DEV}?sslmode=disable
       - REDIS_URL=redis:6379
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PORT=8080
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/firebase-credentials.json
     depends_on:
       postgres:
         condition: service_healthy
