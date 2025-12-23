@@ -1,21 +1,36 @@
 package handlers
 
 import (
-	//"PennieAI/config"
-	//"PennieAI/models"
+	"PennieAI/config"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 func SignUp(c *gin.Context) {
+	app := config.GetFirebaseApp()
+	authClient, err := app.Auth(c.Request.Context())
 
-	fmt.Println("Sign Up context here:", c.Request)
-	//var req struct {
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Auth client error"})
+		return
+	}
+
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No authorization header"})
+		return
+	}
+	//token := strings.TrimPrefix(authHeader, "Bearer ")
+	////decodedToken, err := authClient.VerifyIDToken(c.Request.Context(), token)
+	//
+	//if err != nil {
+	//	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+	//	return
 	//}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Sign Up endpoint - to be implemented",
-	})
+	//email := decodedToken.Claims["email"]
+	//uid := decodedToken.UID
 
 }
