@@ -39,7 +39,6 @@ func NewAIService() *AIService {
 	}
 }
 
-// Context below is part of Go's standard library for request-scoped values
 func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions) (map[string]interface{}, error) {
 	if opts == nil {
 		opts = &QueryOptions{}
@@ -47,7 +46,6 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 
 	model := os.Getenv("OPENAI_MODEL_VERSION")
 
-	// Make the API call
 	response, err := s.client.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.SystemMessage("You are a helpful assistant for a veterinary healthcare company, Pennie. Please respond with valid JSON."),
@@ -72,7 +70,7 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 
 	// Handle linking to inferable object (polymorphic association)
 	//if opts.Inferable != nil {
-	//	// You'd implement polymorphic logic here based on type
+	//	// Maybe implement polymorphic logic here based on type
 	//	// For now, simplified:
 	//	switch v := opts.Inferable.(type) {
 	//	case *models.UnprocessedDocument:
@@ -105,15 +103,12 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 	})
 	inference.Response = string(responseJSON)
 
-	// Save inference to database
 	s.saveInference(inference)
 
-	// Call callback if provided (equivalent to yield)
 	if opts.Callback != nil {
 		opts.Callback(inference)
 	}
 
-	// Parse the actual JSON content (equivalent to your double JSON.parse)
 	var parsedResponse map[string]interface{}
 	if err := json.Unmarshal([]byte(response.Choices[0].Message.Content), &parsedResponse); err != nil {
 		return nil, fmt.Errorf("failed to parse JSON response: %w", err)
@@ -123,7 +118,6 @@ func (s *AIService) Query(ctx context.Context, prompt string, opts *QueryOptions
 		return nil, nil
 	}
 
-	// Schema validation (equivalent to your dry-schema validation)
 	if opts.Schema != nil {
 		if err := opts.Schema(parsedResponse); err != nil {
 			return nil, fmt.Errorf("invalid JSON response: %w", err)
@@ -160,11 +154,6 @@ func (s *AIService) saveInference(inference *models.Inference) error {
 		inference.CreatedAt,
 		inference.UpdatedAt,
 	)
-}
-
-// Helper function for string pointers
-func stringPtr(s string) *string {
-	return &s
 }
 
 func GetModelVersion() string {
