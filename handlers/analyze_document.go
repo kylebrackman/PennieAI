@@ -16,8 +16,6 @@ type AnalyzeResponse struct {
 }
 
 func AnalyzeUnprocessedDocument(c *gin.Context) {
-	// Placeholder for analyzing an unprocessed document
-
 	file, err := c.FormFile("document")
 
 	if err != nil {

@@ -5,9 +5,10 @@ import (
 	"PennieAI/models"
 	"PennieAI/repository"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Auth(c *gin.Context) {
@@ -51,6 +52,7 @@ func Auth(c *gin.Context) {
 
 	err = repository.CreateUser(&userEntry)
 	if err != nil {
+		// Todo: error logic to delete the created user from FirebaseUI in the firebase console if the db fails to create here. Do NOT want user created in Firebase without it being in the postgres db here
 		fmt.Println("Error creating user in database:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return

@@ -10,7 +10,6 @@ import (
 	"PennieAI/models"
 )
 
-// GetAllDocuments retrieves all documents from the database
 func GetAllAnalyzedDocuments(c *gin.Context) {
 	db := config.GetDB()
 
@@ -32,11 +31,9 @@ func GetAllAnalyzedDocuments(c *gin.Context) {
 	})
 }
 
-// GetDocumentByID retrieves a single document by ID
 func GetDocumentByID(c *gin.Context) {
 	db := config.GetDB()
 
-	// Get ID from URL parameter
 	idParam := c.Param("id")
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
@@ -61,7 +58,6 @@ func GetDocumentByID(c *gin.Context) {
 	})
 }
 
-// CreateDocument creates a new document
 func CreateDocument(c *gin.Context) {
 	db := config.GetDB()
 
@@ -96,52 +92,6 @@ func CreateDocument(c *gin.Context) {
 	})
 }
 
-// UpdateDocument updates an existing document
-func UpdateDocument(c *gin.Context) {
-	db := config.GetDB()
-
-	// Get ID from URL
-	idParam := c.Param("id")
-	id, err := strconv.ParseInt(idParam, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid document ID format",
-		})
-		return
-	}
-
-	var req UpdateDocumentRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "Invalid request format",
-			"message": err.Error(),
-		})
-		return
-	}
-
-	var document models.AnalyzedDocument
-	query := `
-		UPDATE documents 
-		SET title = $2, content = $3, document_type = $4, updated_at = NOW()
-		WHERE id = $1
-		RETURNING *`
-
-	err = db.Get(&document, query, id, req.Title, req.Content, req.DocumentType)
-
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": "Document not found or failed to update",
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"data":    document,
-		"message": "Document updated successfully",
-	})
-}
-
-// DeleteDocument deletes a document
 func DeleteDocument(c *gin.Context) {
 	db := config.GetDB()
 

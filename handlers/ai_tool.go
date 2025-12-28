@@ -9,10 +9,8 @@ import (
 )
 
 func TestAiService(ctx *gin.Context) {
-	// Create service
 	aiService := services.NewAIService()
 
-	// Call the service (equivalent to Openai.query in Ruby)
 	result, err := aiService.Query(ctx.Request.Context(), "Say 'Hello from PennieAI!' if you can hear me, and let me know which gpt version I am talking to.", nil)
 
 	if err != nil {

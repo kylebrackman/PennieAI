@@ -9,7 +9,6 @@ import (
 	"PennieAI/models"
 )
 
-// GetAllUnprocessedDocuments retrieves all unprocessed documents
 func GetAllUnprocessedDocuments(c *gin.Context) {
 	db := config.GetDB()
 
