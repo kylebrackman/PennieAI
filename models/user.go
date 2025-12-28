@@ -5,13 +5,13 @@ import (
 )
 
 type User struct {
-	ID           int        `json:"id" db:"id"`
-	FirebaseUID  string     `json:"firebaseUID" db:"firebase_uid"`
-	Email        string     `json:"email" db:"email"`
-	FirstName    *string    `json:"firstName" db:"first_name"`
-	LastName     *string    `json:"lastName" db:"last_name"`
-	PhotoURL     *string    `json:"photoURL" db:"photo_url"`
-	LastSignInAt *time.Time `json:"lastSignInAt" db:"last_sign_in_at"`
-	CreatedAt    time.Time  `json:"createdAt" db:"created_at"`
-	UpdatedAt    time.Time  `json:"updatedAt" db:"updated_at"`
+	ID           int        `json:"id" repository:"id"`
+	FirebaseUID  string     `json:"firebaseUID" repository:"firebase_uid"`
+	Email        string     `json:"email" repository:"email"`
+	FirstName    *string    `json:"firstName" repository:"first_name"`
+	LastName     *string    `json:"lastName" repository:"last_name"`
+	PhotoURL     *string    `json:"photoURL" repository:"photo_url"`
+	LastSignInAt *time.Time `json:"lastSignInAt" repository:"last_sign_in_at"`
+	CreatedAt    time.Time  `json:"createdAt" repository:"created_at"`
+	UpdatedAt    time.Time  `json:"updatedAt" repository:"updated_at"`
 }

@@ -146,8 +146,8 @@ func (s *AIService) saveInference(inference *models.Inference) error {
 		RETURNING id`
 
 	/**
-	The below db.Get populates inference.ID with the returned id
-	db.Get is like db.QueryRow but it scans the result into the provided destination
+	The below repository.Get populates inference.ID with the returned id
+	repository.Get is like repository.QueryRow but it scans the result into the provided destination
 	We pass the address of inference.ID so it gets populated
 	The rest are the parameters for the SQL query
 	*/

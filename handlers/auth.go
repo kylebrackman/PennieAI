@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"PennieAI/config"
-	//"PennieAI/models"
+	"PennieAI/models"
+	"PennieAI/repository"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -42,19 +43,16 @@ func Auth(c *gin.Context) {
 		photoURL = &photo
 	}
 
-	db := config.GetDB()
+	userEntry := models.User{
+		FirebaseUID: uid,
+		Email:       email.(string),
+		PhotoURL:    photoURL,
+	}
 
-	//user := models.User{
-	//	FirebaseUID: uid,
-	//	Email:       email.(string),
-	//	PhotoURL:    photoURL,
-	//}
-
-	_, err = db.Exec("INSERT INTO users (firebase_uid, email, photo_url) VALUES ($1, $2, $3)", uid, email, photoURL)
-
+	err = repository.CreateUser(&userEntry)
 	if err != nil {
-		fmt.Println("Error inserting user into database:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		fmt.Println("Error creating user in database:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return
 	}
 

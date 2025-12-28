@@ -25,7 +25,7 @@ func RunMigrations() error {
 	db := GetDB()
 
 	/*
-	  db.DB is accessing the underlying database/sql connection from sqlx
+	  repository.DB is accessing the underlying database/sql connection from sqlx
 	  postgres.WithInstance wraps this connection in migration-specific logic
 	*/
 	driver, err := postgres.WithInstance(db.DB, &postgres.Config{})
