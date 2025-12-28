@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"PennieAI/config"
+	//"PennieAI/models"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-
-	"github.com/gin-gonic/gin"
 )
 
 func Auth(c *gin.Context) {
@@ -37,11 +37,20 @@ func Auth(c *gin.Context) {
 
 	email := decodedToken.Claims["email"]
 	uid := decodedToken.UID
-	photo := decodedToken.Claims["picture"]
+	var photoURL *string
+	if photo, ok := decodedToken.Claims["picture"].(string); ok && photo != "" {
+		photoURL = &photo
+	}
 
 	db := config.GetDB()
 
-	_, err = db.Exec("INSERT INTO users (firebase_uid, email, photo_url) VALUES ($1, $2, $3)", uid, email, photo)
+	//user := models.User{
+	//	FirebaseUID: uid,
+	//	Email:       email.(string),
+	//	PhotoURL:    photoURL,
+	//}
+
+	_, err = db.Exec("INSERT INTO users (firebase_uid, email, photo_url) VALUES ($1, $2, $3)", uid, email, photoURL)
 
 	if err != nil {
 		fmt.Println("Error inserting user into database:", err)
@@ -53,6 +62,6 @@ func Auth(c *gin.Context) {
 		"message": "User signed up successfully",
 		"uid":     uid,
 		"email":   email,
-		"photo":   photo,
+		"photo":   photoURL,
 	})
 }

@@ -6,10 +6,12 @@ import (
 
 type User struct {
 	ID           int        `json:"id" db:"id"`
+	FirebaseUID  string     `json:"firebaseUID" db:"firebase_uid"`
 	Email        string     `json:"email" db:"email"`
-	FirstName    *string    `json:"first_name" db:"first_name"`
-	LastName     *string    `json:"last_name" db:"last_name"`
-	LastSignInAt *time.Time `json:"last_sign_in_at" db:"last_sign_in_at"`
-	CreatedAt    time.Time  `json:"created_at" db:"created_at"`
-	UpdatedAt    time.Time  `json:"updated_at" db:"updated_at"`
+	FirstName    *string    `json:"firstName" db:"first_name"`
+	LastName     *string    `json:"lastName" db:"last_name"`
+	PhotoURL     *string    `json:"photoURL" db:"photo_url"`
+	LastSignInAt *time.Time `json:"lastSignInAt" db:"last_sign_in_at"`
+	CreatedAt    time.Time  `json:"createdAt" db:"created_at"`
+	UpdatedAt    time.Time  `json:"updatedAt" db:"updated_at"`
 }
