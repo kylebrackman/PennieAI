@@ -3,12 +3,13 @@ package handlers
 import (
 	"PennieAI/config"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
-func SignUp(c *gin.Context) {
+func Auth(c *gin.Context) {
 	app := config.GetFirebaseApp()
 	authClient, err := app.Auth(c.Request.Context())
 
