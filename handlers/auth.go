@@ -37,30 +37,40 @@ func Auth(c *gin.Context) {
 		return
 	}
 
+	firebaseUID := decodedToken.UID
 	email := decodedToken.Claims["email"]
-	uid := decodedToken.UID
 	var photoURL *string
 	if photo, ok := decodedToken.Claims["picture"].(string); ok && photo != "" {
 		photoURL = &photo
 	}
 
-	userEntry := models.User{
-		FirebaseUID: uid,
-		Email:       email.(string),
-		PhotoURL:    photoURL,
-	}
-
-	err = repository.CreateUser(&userEntry)
+	userExists, err := repository.FindUserByFirebaseUID(firebaseUID)
 	if err != nil {
-		// Todo: error logic to delete the created user from FirebaseUI in the firebase console if the db fails to create here. Do NOT want user created in Firebase without it being in the postgres db here
-		fmt.Println("Error creating user in database:", err)
+		fmt.Println("Error checking user existence:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
 		return
 	}
 
+	if !userExists {
+
+		userEntry := models.User{
+			FirebaseUID: firebaseUID,
+			Email:       email.(string),
+			PhotoURL:    photoURL,
+		}
+
+		err = repository.CreateUser(&userEntry)
+		if err != nil {
+			// Todo: error logic to delete the created user from FirebaseUI in the firebase console if the db fails to create here. Do NOT want user created in Firebase without it being in the postgres db here
+			fmt.Println("Error creating user in database:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
+			return
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"message": "User signed up successfully",
-		"uid":     uid,
+		"uid":     firebaseUID,
 		"email":   email,
 		"photo":   photoURL,
 	})
