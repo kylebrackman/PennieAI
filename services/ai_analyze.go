@@ -25,7 +25,6 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 
 	for _, window := range windows {
 		// Build incremental notice if we have previous documents
-		// Build incremental notice if we have previous documents
 		// This tells OpenAI what we've already found in earlier windows to avoid duplicates
 		var incrementalNotice string
 
@@ -51,8 +50,7 @@ func AnalyzeDocument(file *multipart.FileHeader, aiService *AIService) (*models.
 		}
 
 		analyzedDocuments = append(analyzedDocuments, models.AnalyzedDocument{
-			Title: fmt.Sprintf("test_%d", window.StartIndex),
-			// Just for testing purposes
+			Title:     fmt.Sprintf("test_%d", window.StartIndex),
 			StartLine: 0,
 			EndLine:   1,
 		})
