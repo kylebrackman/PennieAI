@@ -32,6 +32,11 @@ func SetupRoutes(router *gin.Engine) {
 			auth.POST("/signin", handlers.Auth) // POST /api/v1/auth/signin
 		}
 
+		patients := v1.Group("/patients")
+		{
+			patients.POST("", handlers.CreatePatient) // POST /api/v1/patients
+		}
+
 		documents := v1.Group("/documents")
 		{
 			documents.GET("", handlers.GetAllAnalyzedDocuments) // GET /api/v1/documents
