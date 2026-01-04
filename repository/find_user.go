@@ -11,10 +11,10 @@ func FindUserByFirebaseUID(firebaseUID string) (bool, error) {
 	var exists bool
 	err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE firebase_uid = $1)", firebaseUID).Scan(&exists)
 
+	fmt.Println("Checking if user exists with Firebase UID:", firebaseUID, "Exists:", exists)
 	if err != nil {
-		fmt.Println("Error checking user existence in database:", err)
 		return false, err
 	}
 
-	return true, nil
+	return exists, nil
 }

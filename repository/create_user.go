@@ -8,6 +8,8 @@ import (
 
 func CreateUser(user *models.User) error {
 	db := config.GetDB()
+
+	fmt.Println("Creating user")
 	_, err := db.Exec("INSERT INTO users (firebase_uid, email, photo_url) VALUES ($1, $2, $3)", user.FirebaseUID, user.Email, user.PhotoURL)
 	if err != nil {
 		fmt.Println("Error inserting user into database:", err)
