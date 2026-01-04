@@ -29,7 +29,7 @@ func SetupRoutes(router *gin.Engine) {
 
 		auth := v1.Group("/auth")
 		{
-			auth.POST("/signin", handlers.Auth) // POST /api/v1/auth/signin
+			auth.POST("/signin", handlers.Signin) // POST /api/v1/auth/signin
 		}
 
 		patients := v1.Group("/patients")

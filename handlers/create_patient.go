@@ -34,5 +34,5 @@ func CreatePatient(c *gin.Context) {
 		"message":    "Patient created successfully",
 		"patient_id": patientID,
 	})
-	
+
 }
