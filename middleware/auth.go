@@ -14,7 +14,6 @@ const UserContextKey = "authenticatedUser"
 
 func AuthRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Verify the token
 		decodedToken, err := utils.VerifyFirebaseToken(c)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
@@ -27,7 +26,6 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		// Attach to context for handlers
 		c.Set(UserContextKey, user)
 
 		c.Next()

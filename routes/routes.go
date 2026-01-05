@@ -32,12 +32,12 @@ func SetupRoutes(router *gin.Engine) {
 			auth.POST("/signin", handlers.Signin) // POST /api/v1/auth/signin
 		}
 
-		patients := v1.Group("/patients")
+		patients := v1.Group("/patients").Use(middleware.AuthRequired())
 		{
 			patients.POST("", handlers.CreatePatient) // POST /api/v1/patients
 		}
 
-		documents := v1.Group("/documents")
+		documents := v1.Group("/documents").Use(middleware.AuthRequired())
 		{
 			documents.GET("", handlers.GetAllAnalyzedDocuments) // GET /api/v1/documents
 			documents.GET("/:id", handlers.GetDocumentByID)     // GET /api/v1/documents/:id
@@ -45,20 +45,19 @@ func SetupRoutes(router *gin.Engine) {
 			documents.DELETE("/:id", handlers.DeleteDocument)   // DELETE /api/v1/documents/:id
 		}
 
-		aiTool := v1.Group("/ai_tool")
+		aiTool := v1.Group("/ai_tool").Use(middleware.AuthRequired())
 		{
 			aiTool.GET("/test", handlers.TestAiService)
 			aiTool.GET("/model_version", handlers.GetAiModelVersion)
 		}
 
-		unprocessedDocuments := v1.Group("/unprocessed")
+		unprocessedDocuments := v1.Group("/unprocessed").Use(middleware.AuthRequired())
 		{
 			unprocessedDocuments.GET("", handlers.GetAllUnprocessedDocuments)
 			unprocessedDocuments.POST("/analyze",
 				middleware.OpenAIRateLimiter(),
 				handlers.AnalyzeUnprocessedDocument)
 		}
-
 	}
 
 	router.NoRoute(func(c *gin.Context) {
