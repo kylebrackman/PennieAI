@@ -1,11 +1,10 @@
 package handlers
 
 import (
-	//"PennieAI/models"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	//"net/http"
+
 	"PennieAI/repository"
 )
 
