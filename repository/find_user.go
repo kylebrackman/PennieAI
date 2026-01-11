@@ -1,20 +1,31 @@
 package repository
 
 import (
+	"database/sql"
+	"errors"
+
 	"PennieAI/config"
-	"fmt"
+	"PennieAI/models"
 )
 
-func FindUserByFirebaseUID(firebaseUID string) (bool, error) {
+var ErrUserNotFound = errors.New("user not found")
+
+func FindUserByFirebaseUID(firebaseUID string) (models.User, error) {
 	db := config.GetDB()
 
-	var exists bool
-	err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE firebase_uid = $1)", firebaseUID).Scan(&exists)
+	var user models.User
 
-	fmt.Println("Checking if user exists with Firebase UID:", firebaseUID, "Exists:", exists)
+	err := db.QueryRowx(
+		"SELECT id, firebase_uid, email FROM users WHERE firebase_uid = $1",
+		firebaseUID,
+	).StructScan(&user)
+
 	if err != nil {
-		return false, err
+		if errors.Is(err, sql.ErrNoRows) {
+			return models.User{}, ErrUserNotFound
+		}
+		return models.User{}, err
 	}
 
-	return exists, nil
+	return user, nil
 }

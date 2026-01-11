@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -25,15 +26,8 @@ func Signin(c *gin.Context) {
 		photoURL = &photo
 	}
 
-	userExists, err := repository.FindUserByFirebaseUID(firebaseUID)
-	if err != nil {
-		fmt.Println("Error checking user existence:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
-		return
-	}
-
-	if !userExists {
-
+	user, err := repository.FindUserByFirebaseUID(firebaseUID)
+	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
 		userEntry := models.User{
 			FirebaseUID: firebaseUID,
 			Email:       email.(string),
@@ -51,8 +45,8 @@ func Signin(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "User signed up successfully",
-		"uid":     firebaseUID,
-		"email":   email,
+		"uid":     user.FirebaseUID,
+		"email":   user.Email,
 		"photo":   photoURL,
 	})
 }

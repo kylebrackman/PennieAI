@@ -3,9 +3,9 @@ package models
 import "time"
 
 type UnprocessedDocument struct {
-	ID            int64     `json:"id" repository:"id"`
-	Content       string    `json:"content" repository:"content"`
-	NumberOfLines int64     `json:"numberOfLines" repository:"num_lines"`
-	CreatedAt     time.Time `json:"createdAt" repository:"created_at"`
-	UpdatedAt     time.Time `json:"updatedAt" repository:"updated_at"`
+	ID            int64     `json:"id" db:"id"`
+	Content       string    `json:"content" db:"content"`
+	NumberOfLines int64     `json:"numberOfLines" db:"num_lines"`
+	CreatedAt     time.Time `json:"createdAt" db:"created_at"`
+	UpdatedAt     time.Time `json:"updatedAt" db:"updated_at"`
 }
