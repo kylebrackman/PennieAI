@@ -26,7 +26,7 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		c.Set(UserContextKey, user)
+		c.Set(UserContextKey, &user)
 
 		c.Next()
 	}
@@ -34,9 +34,14 @@ func AuthRequired() gin.HandlerFunc {
 
 // GetAuthenticatedUser retrieves the user from context
 func GetAuthenticatedUser(c *gin.Context) (*models.User, bool) {
-	user, exists := c.Get(UserContextKey)
+	value, exists := c.Get(UserContextKey)
 	if !exists {
 		return nil, false
 	}
-	return user.(*models.User), true
+	user, ok := value.(*models.User)
+
+	if !ok {
+		return nil, false
+	}
+	return user, true
 }
