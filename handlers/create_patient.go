@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"PennieAI/middleware"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,7 +11,13 @@ import (
 )
 
 func CreatePatient(c *gin.Context) {
-	// Todo: Implement logic to authenticate that the user who sent the request is in firebase and that the request isn't malicious
+
+	doctor, ok := middleware.GetAuthenticatedUser(c)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		return
+	}
+
 	var req struct {
 		Name string `json:"name"`
 	}
@@ -23,7 +31,7 @@ func CreatePatient(c *gin.Context) {
 
 	patientName := req.Name
 
-	patientID, err := repository.CreatePatient(patientName)
+	patientID, err := repository.CreatePatient(patientName, doctor.ID)
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to create patient"})
 		return

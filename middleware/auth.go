@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"PennieAI/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,6 +41,7 @@ func GetAuthenticatedUser(c *gin.Context) (*models.User, bool) {
 	}
 	user, ok := value.(*models.User)
 
+	fmt.Println("user in context:", user)
 	if !ok {
 		return nil, false
 	}

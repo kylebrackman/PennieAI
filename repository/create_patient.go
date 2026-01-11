@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-func CreatePatient(name string) (int, error) {
+func CreatePatient(name string, doctorId int) (int, error) {
 
 	db := config.GetDB()
 
-	_, err := db.Exec("INSERT INTO patients (name) VALUES ($1)", name)
+	_, err := db.Exec("INSERT INTO patients (name, doctor_id) VALUES ($1, $2)", name, doctorId)
 	if err != nil {
 		fmt.Println("Error inserting user into database:", err)
 		return 0, err
