@@ -3,7 +3,6 @@ package handlers
 import (
 	"PennieAI/middleware"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 
@@ -14,7 +13,8 @@ func CreatePatient(c *gin.Context) {
 
 	doctor, ok := middleware.GetAuthenticatedUser(c)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authenticated"})
+		fmt.Println("ERROR: GetAuthenticatedUser failed - check route middleware configuration")
+		c.JSON(500, gin.H{"error": "Internal error"})
 		return
 	}
 
