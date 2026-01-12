@@ -35,6 +35,7 @@ func SetupRoutes(router *gin.Engine) {
 		patients := v1.Group("/patients").Use(middleware.AuthRequired())
 		{
 			patients.POST("", handlers.CreatePatient) // POST /api/v1/patients
+			patients.GET("", handlers.GetPatients)    // GET /api/v1/patients
 		}
 
 		documents := v1.Group("/documents").Use(middleware.AuthRequired())
