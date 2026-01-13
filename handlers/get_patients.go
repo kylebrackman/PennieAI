@@ -10,7 +10,6 @@ import (
 )
 
 func GetPatients(c *gin.Context) {
-	fmt.Println("GetPatients")
 	doctor, ok := middleware.GetAuthenticatedUser(c)
 	if !ok {
 		fmt.Println("ERROR: GetAuthenticatedUser failed - check route middleware configuration")
