@@ -124,10 +124,6 @@ Add the -d flag to run in detached mode if you would like to keep your terminal 
 - **OpenAI GPT-4**: Document analysis and entity extraction
 - **openai-go**: Official OpenAI Go client
 
-### Infrastructure (Current)
-- **godotenv**: Environment variable management
-- **CORS Middleware**: Cross-origin request handling
-
 ---
 
 ## API Documentation
@@ -138,7 +134,7 @@ http://localhost:8080/api/v1
 ```
 
 ### Authentication
-Currently no authentication is required. API authentication (JWT) is planned for Phase 7 (Production Readiness).
+Pennie uses Firebase for authentication.
 
 ---
 

@@ -21,13 +21,14 @@ func Signin(c *gin.Context) {
 
 	firebaseUID := decodedToken.UID
 	email := decodedToken.Claims["email"]
+	fmt.Println("email here", email)
 	var photoURL *string
 	if photo, ok := decodedToken.Claims["picture"].(string); ok && photo != "" {
 		photoURL = &photo
 	}
 
 	user, err := repository.FindUserByFirebaseUID(firebaseUID)
-	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
+	if err != nil && errors.Is(err, repository.ErrUserNotFound) {
 		userEntry := models.User{
 			FirebaseUID: firebaseUID,
 			Email:       email.(string),
